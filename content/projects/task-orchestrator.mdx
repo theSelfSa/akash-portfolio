@@ -1,0 +1,56 @@
+---
+title: "Distributed Task Orchestrator"
+subtitle: "Fault-Tolerant Async Job Processing System"
+date: "2024-06"
+category: "backend"
+tags: ["Python", "Redis", "Celery", "FastAPI", "Docker", "PostgreSQL", "Prometheus", "Grafana"]
+github: "https://github.com/TheSelfSa/task-orchestrator"
+demo: ""
+featured: true
+order: 3
+coverImage: "/manus-storage/project-orchestrator_495823e6.png"
+metrics:
+  - "99.9% pipeline uptime"
+  - "Horizontal scaling via worker pools"
+  - "Real-time Prometheus/Grafana monitoring"
+  - "Dead-letter queue with automatic retry"
+---
+
+## Overview
+
+A distributed task orchestration system built to handle high-throughput, fault-tolerant async job processing. The system was designed around the constraints of real ML inference pipelines — where tasks are computationally expensive, failures are expected, and observability is non-negotiable.
+
+The architecture uses Celery as the task queue, Redis as the message broker, PostgreSQL for persistent job state, and FastAPI for the control plane API. All components are containerized with Docker Compose for local development and production parity.
+
+## Problem Statement
+
+ML inference pipelines have a specific failure profile that generic task queues handle poorly:
+
+- Tasks take 10–300 seconds (not milliseconds)
+- GPU OOM errors are common and need graceful handling
+- Partial results need to be checkpointed so failed tasks can resume
+- Monitoring needs to surface queue depth, worker utilization, and per-task latency
+
+Standard Celery configurations don't handle these requirements well out of the box. This project implements the infrastructure patterns needed to make Celery production-ready for ML workloads.
+
+## Architecture
+
+**Control Plane (FastAPI)** — REST API for submitting tasks, querying status, cancelling jobs, and viewing metrics. All task state is persisted in PostgreSQL so the API can answer status queries even if workers are down.
+
+**Task Queue (Celery + Redis)** — Tasks are serialized and pushed to Redis queues. Workers pull tasks, execute them, and write results back to PostgreSQL. The queue is partitioned by task type (CPU-bound vs GPU-bound) to prevent GPU tasks from starving CPU tasks.
+
+**Worker Pool** — Workers are stateless and horizontally scalable. Each worker registers its capabilities (CPU/GPU, available memory) on startup. The task router uses this registry to assign tasks to appropriate workers.
+
+**Dead-Letter Queue** — Failed tasks are moved to a DLQ with full error context. A separate retry worker processes the DLQ with exponential backoff. After a configurable number of retries, tasks are marked as permanently failed and an alert is triggered.
+
+**Observability** — Prometheus metrics are exported from both the API and workers. A Grafana dashboard shows queue depth, worker utilization, task throughput, error rate, and p50/p95/p99 latency. This was the feature that took the most time to build correctly but provides the most operational value.
+
+## What I Learned About Distributed Systems
+
+Building this system made concrete several distributed systems concepts that had previously been abstract:
+
+**Idempotency is not optional.** When a worker crashes mid-task, the task will be retried. If the task has side effects (writing to a database, calling an external API), those side effects may execute twice. Every task handler must be written to be safe to retry — either by checking for existing results before executing, or by using database transactions with unique constraints.
+
+**The broker is a single point of failure.** Redis is fast and reliable, but it is a single node. For true high availability, Redis Sentinel or Redis Cluster is required. This is a known limitation of the current implementation.
+
+**Monitoring is a first-class feature.** I initially planned to add Prometheus/Grafana "at the end." This was a mistake — building observability in from the start would have saved significant debugging time during development.

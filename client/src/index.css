@@ -1,0 +1,418 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   DESIGN SYSTEM: Premium Minimal with Spatial Depth
+   Typography: Inter (body) + JetBrains Mono (code/metrics)
+   Accent: User-selectable (6 options), applied via CSS var
+   ============================================================ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ============================================================
+   ACCENT COLOR SYSTEM
+   CSS custom properties for each accent, toggled via JS class
+   ============================================================ */
+
+/* Default accent: Indigo */
+:root {
+  --accent-color: #6366f1;
+  --accent-color-dark: #818cf8;
+  --accent-color-muted: rgba(99, 102, 241, 0.12);
+  --accent-color-muted-dark: rgba(129, 140, 248, 0.15);
+}
+
+/* Accent variants via data attribute */
+[data-accent="indigo"] {
+  --accent-color: #6366f1;
+  --accent-color-dark: #818cf8;
+  --accent-color-muted: rgba(99, 102, 241, 0.12);
+  --accent-color-muted-dark: rgba(129, 140, 248, 0.15);
+}
+[data-accent="cyan"] {
+  --accent-color: #0891b2;
+  --accent-color-dark: #22d3ee;
+  --accent-color-muted: rgba(8, 145, 178, 0.12);
+  --accent-color-muted-dark: rgba(34, 211, 238, 0.15);
+}
+[data-accent="coral"] {
+  --accent-color: #ea580c;
+  --accent-color-dark: #fb923c;
+  --accent-color-muted: rgba(234, 88, 12, 0.12);
+  --accent-color-muted-dark: rgba(251, 146, 60, 0.15);
+}
+[data-accent="gold"] {
+  --accent-color: #d97706;
+  --accent-color-dark: #f59e0b;
+  --accent-color-muted: rgba(217, 119, 6, 0.12);
+  --accent-color-muted-dark: rgba(245, 158, 11, 0.15);
+}
+[data-accent="violet"] {
+  --accent-color: #9333ea;
+  --accent-color-dark: #c084fc;
+  --accent-color-muted: rgba(147, 51, 234, 0.12);
+  --accent-color-muted-dark: rgba(192, 132, 252, 0.15);
+}
+[data-accent="mint"] {
+  --accent-color: #059669;
+  --accent-color-dark: #34d399;
+  --accent-color-muted: rgba(5, 150, 105, 0.12);
+  --accent-color-muted-dark: rgba(52, 211, 153, 0.15);
+}
+
+/* ============================================================
+   LIGHT THEME — Warm off-white base, clear card separation,
+   strong typography hierarchy, accent pops on light surfaces
+   ============================================================ */
+:root {
+  --radius: 0.5rem;
+  /* Warm off-white — not pure white, gives depth and warmth */
+  --background: oklch(0.97 0.003 250);
+  --foreground: oklch(0.1 0.008 260);
+  /* Cards sit above background — clear surface separation */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.1 0.008 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.1 0.008 260);
+  --primary: oklch(0.52 0.2 264);
+  --primary-foreground: oklch(0.99 0 0);
+  /* Muted sections clearly distinct from background */
+  --secondary: oklch(0.93 0.005 260);
+  --secondary-foreground: oklch(0.2 0.01 260);
+  --muted: oklch(0.93 0.005 260);
+  /* Darker muted-foreground — reads as supporting text, not disabled */
+  --muted-foreground: oklch(0.42 0.015 260);
+  --accent: oklch(0.93 0.005 260);
+  --accent-foreground: oklch(0.1 0.008 260);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  /* Stronger borders — visible on white cards */
+  --border: oklch(0.86 0.006 260);
+  --input: oklch(0.86 0.006 260);
+  --ring: oklch(0.52 0.2 264);
+  --sidebar: oklch(0.95 0.004 260);
+  --sidebar-foreground: oklch(0.1 0.008 260);
+  --sidebar-primary: oklch(0.52 0.2 264);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.93 0.005 260);
+  --sidebar-accent-foreground: oklch(0.1 0.008 260);
+  --sidebar-border: oklch(0.86 0.006 260);
+  --sidebar-ring: oklch(0.52 0.2 264);
+}
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+.dark {
+  --background: oklch(0.09 0.005 285);
+  --foreground: oklch(0.93 0.003 285);
+  --card: oklch(0.12 0.006 285);
+  --card-foreground: oklch(0.93 0.003 285);
+  --popover: oklch(0.12 0.006 285);
+  --popover-foreground: oklch(0.93 0.003 285);
+  --primary: oklch(0.65 0.18 264);
+  --primary-foreground: oklch(0.09 0.005 285);
+  --secondary: oklch(0.16 0.006 286);
+  --secondary-foreground: oklch(0.75 0.005 285);
+  --muted: oklch(0.18 0.006 286);
+  --muted-foreground: oklch(0.62 0.015 285);
+  --accent: oklch(0.18 0.006 286);
+  --accent-foreground: oklch(0.93 0.003 285);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.65 0.18 264);
+  --sidebar: oklch(0.12 0.006 285);
+  --sidebar-foreground: oklch(0.93 0.003 285);
+  --sidebar-primary: oklch(0.65 0.18 264);
+  --sidebar-primary-foreground: oklch(0.09 0.005 285);
+  --sidebar-accent: oklch(0.18 0.006 286);
+  --sidebar-accent-foreground: oklch(0.93 0.003 285);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-ring: oklch(0.65 0.18 264);
+}
+
+/* ============================================================
+   GLOBAL BASE STYLES
+   ============================================================ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  a[href],
+  select:not(:disabled) {
+    @apply cursor-pointer;
+  }
+  ::selection {
+    background-color: var(--accent-color);
+    color: white;
+  }
+  .dark ::selection {
+    background-color: var(--accent-color-dark);
+    color: oklch(0.09 0.005 285);
+  }
+}
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 3rem;
+      padding-right: 3rem;
+      max-width: 1200px;
+    }
+  }
+
+  /* Accent color utilities — use these throughout components */
+  .text-accent-brand {
+    color: var(--accent-color);
+  }
+  .dark .text-accent-brand {
+    color: var(--accent-color-dark);
+  }
+  .bg-accent-brand {
+    background-color: var(--accent-color);
+  }
+  .dark .bg-accent-brand {
+    background-color: var(--accent-color-dark);
+  }
+  .bg-accent-muted {
+    background-color: var(--accent-color-muted);
+  }
+  .dark .bg-accent-muted {
+    background-color: var(--accent-color-muted-dark);
+  }
+  .border-accent-brand {
+    border-color: var(--accent-color);
+  }
+  .dark .border-accent-brand {
+    border-color: var(--accent-color-dark);
+  }
+  .ring-accent-brand {
+    --tw-ring-color: var(--accent-color);
+  }
+  .dark .ring-accent-brand {
+    --tw-ring-color: var(--accent-color-dark);
+  }
+
+  /* Section spacing */
+  .section-padding {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  @media (min-width: 1024px) {
+    .section-padding {
+      padding-top: 7rem;
+      padding-bottom: 7rem;
+    }
+  }
+
+  /* Mono font for metrics/code */
+  .font-mono-custom {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-feature-settings: "liga" 0;
+  }
+
+  /* Smooth accent transition */
+  .accent-transition {
+    transition: color 300ms ease, background-color 300ms ease, border-color 300ms ease;
+  }
+
+  /* Dot grid pattern */
+  .dot-grid {
+    background-image: radial-gradient(circle, oklch(0.3 0 0 / 0.18) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .dark .dot-grid {
+    background-image: radial-gradient(circle, oklch(1 0 0 / 0.06) 1px, transparent 1px);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, var(--foreground) 0%, var(--accent-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .dark .gradient-text {
+    background: linear-gradient(135deg, var(--foreground) 0%, var(--accent-color-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glassmorphism card */
+  .glass-card {
+    background: oklch(1 0 0 / 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid oklch(0 0 0 / 0.1);
+    box-shadow: 0 1px 3px oklch(0 0 0 / 0.06), 0 4px 16px oklch(0 0 0 / 0.04);
+  }
+  .dark .glass-card {
+    background: oklch(1 0 0 / 0.04);
+    backdrop-filter: blur(12px);
+    border: 1px solid oklch(1 0 0 / 0.08);
+  }
+
+  /* Subtle hover lift */
+  .hover-lift {
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px oklch(0 0 0 / 0.1), 0 2px 8px oklch(0 0 0 / 0.06);
+  }
+  .dark .hover-lift:hover {
+    box-shadow: 0 8px 24px oklch(0 0 0 / 0.4);
+  }
+
+  /* Animated underline link */
+  .link-underline {
+    position: relative;
+    text-decoration: none;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--accent-color);
+    transition: width 250ms ease;
+  }
+  .dark .link-underline::after {
+    background-color: var(--accent-color-dark);
+  }
+  .link-underline:hover::after {
+    width: 100%;
+  }
+
+  /* Hero bloom drift animations — slow, organic, elegant */
+  @keyframes bloom-drift-1 {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
+    25% { transform: translate(-35px, 45px) scale(1.06); opacity: 0.85; }
+    50% { transform: translate(20px, 25px) scale(0.96); opacity: 0.95; }
+    75% { transform: translate(-15px, -30px) scale(1.04); opacity: 0.9; }
+  }
+  @keyframes bloom-drift-2 {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
+    30% { transform: translate(50px, -35px) scale(1.08); opacity: 0.8; }
+    60% { transform: translate(-25px, 20px) scale(0.94); opacity: 0.9; }
+    80% { transform: translate(30px, 40px) scale(1.03); opacity: 0.85; }
+  }
+  @keyframes bloom-drift-3 {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
+    40% { transform: translate(-40px, -25px) scale(1.12); opacity: 0.75; }
+    70% { transform: translate(25px, 35px) scale(0.9); opacity: 0.88; }
+  }
+  /* Legacy orb drift — kept for compatibility */
+  @keyframes orb-drift-1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-40px, 30px) scale(1.08); }
+    66% { transform: translate(30px, -20px) scale(0.94); }
+  }
+  @keyframes orb-drift-2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    40% { transform: translate(50px, -40px) scale(1.1); }
+    70% { transform: translate(-20px, 20px) scale(0.92); }
+  }
+  @keyframes orb-drift-3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-30px, -30px) scale(1.15); }
+  }
+
+  /* --accent-brand CSS variable shorthand for inline styles */
+  :root {
+    --accent-brand: var(--accent-color);
+  }
+  .dark {
+    --accent-brand: var(--accent-color-dark);
+  }
+
+  /* Availability badge pulse */
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+  .pulse-dot {
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(0.7 0 0 / 0.3);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+  }
+}
