@@ -34,9 +34,9 @@ const fadeUp = {
   }),
 };
 
-const featuredResume = {
+const featuredResume = personal.resumes[0] ?? {
   role: 'Machine Learning Engineer',
-  file: '/manus-storage/Akash_kore_resume_Machine_Learning_Engineer_348e6f03.pdf',
+  file: '/assets/Akash_Kore_Resume_ML_Engineer.pdf',
 };
 
 const metricIcons = [TrendingUp, DollarSign, Activity, Users];

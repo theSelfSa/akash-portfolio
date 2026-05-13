@@ -18,7 +18,7 @@ export const personal = {
   availabilityNote: 'Open to full-time roles — F-1 STEM OPT',
   currentRole: 'AI Software Engineer @ Ready Tensor',
   latestDegree: 'M.S. Computer Science, NC State · 2025',
-  profilePhoto: '', // Add your photo URL here — e.g. /manus-storage/your-photo.jpg
+  profilePhoto: '/assets/Akash_Kore_Profile.png',
   summary: `Applied AI & Software Engineer with 4+ years of experience shipping production AI systems — LLM fine-tuning pipelines, RAG platforms, agentic workflows, and cloud-native backend infrastructure. I've delivered measurable impact at Ready Tensor, Siemens, and JAEA, working at the intersection of AI research and production engineering where clean architecture meets real-world constraints.`,
   heroMetrics: [
     {
@@ -57,10 +57,7 @@ export const personal = {
     { icon: 'chart', text: '4+ years · Ready Tensor, Siemens, JAEA' },
   ],
   resumes: [
-    { role: 'Machine Learning Engineer', file: '/manus-storage/Akash_kore_resume_Machine_Learning_Engineer_348e6f03.pdf' },
-    { role: 'Applied AI Engineer', file: '/manus-storage/Akash_kore_resume_Applied_AI_Engineer_8aa4d0ae.pdf' },
-    { role: 'MLOps Engineer', file: '/manus-storage/Akash_kore_resume_MLOps_Engineer_6c5a1ee5.pdf' },
-    { role: 'Software Engineer', file: '/manus-storage/Akash_kore_resume_SWE_7eabd84e.pdf' },
+    { role: 'Machine Learning Engineer', file: '/assets/Akash_Kore_Resume_ML_Engineer.pdf' },
   ],
 };
 
