@@ -1,5 +1,5 @@
 // ============================================================
-// PORTFOLIO DATA — Akash Kore
+// PORTFOLIO DATA - Akash Kore
 // Single source of truth for all resume/portfolio content.
 // Update this file to change content across the entire site.
 // ============================================================
@@ -15,7 +15,7 @@ export const personal = {
   linkedin: 'https://linkedin.com/in/akashkore',
   github: 'https://github.com/TheSelfSa',
   available: true,
-  availabilityNote: 'Open to full-time roles — F-1 STEM OPT',
+  availabilityNote: 'Open to full-time roles - F-1 STEM OPT',
   currentRole: 'AI Software Engineer @ Ready Tensor',
   latestDegree: 'M.S. Computer Science, NC State · 2025',
   profilePhoto: '/assets/Akash_Kore_Profile.png',
@@ -24,7 +24,7 @@ export const personal = {
     {
       value: '90%',
       label: 'Faster ML Reviews',
-      description: 'Built an LLM evaluation framework using GPT-4o that scores AI/ML repos across 85 criteria — cutting manual review time from hours to minutes.',
+      description: 'Built an LLM evaluation framework using GPT-4o that scores AI/ML repos across 85 criteria, cutting manual review time from hours to minutes.',
       source: 'readytensor PyPI tool · Ready Tensor',
       tag: 'LLM · GPT-4o',
     },
@@ -38,7 +38,7 @@ export const personal = {
     {
       value: '99.9%',
       label: 'Pipeline Uptime',
-      description: 'Designed production MLOps pipelines with Docker, AWS Lambda, and GitHub Actions CI/CD — IaC standards adopted across the engineering team.',
+      description: 'Designed production MLOps pipelines with Docker, AWS Lambda, and GitHub Actions CI/CD - IaC standards adopted across the engineering team.',
       source: 'AWS Lambda + Docker · Ready Tensor',
       tag: 'AWS · Docker · CI/CD',
     },
@@ -52,7 +52,7 @@ export const personal = {
   ],
   heroHighlights: [
     { icon: 'brain', text: 'LLM fine-tuning, RAG pipelines & agentic workflows' },
-    { icon: 'cloud', text: 'Cloud-native infra — AWS, Docker, GitHub Actions' },
+    { icon: 'cloud', text: 'Cloud-native infra - AWS, Docker, GitHub Actions' },
     { icon: 'code', text: 'Full-stack: Python, FastAPI, React, TypeScript' },
     { icon: 'chart', text: '4+ years · Ready Tensor, Siemens, JAEA' },
   ],
@@ -81,7 +81,7 @@ export const experience: Experience[] = [
     period: 'Aug. 2024 – Present',
     location: 'San Diego, CA (Remote)',
     highlights: [
-      'Engineered readytensor, an open-source PyPI tool for AI/ML repository assessment; built an LLM evaluation framework scoring repos across 85 criteria using GPT-4o — cutting review time by 90%.',
+      'Engineered readytensor, an open-source PyPI tool for AI/ML repository assessment; built an LLM evaluation framework scoring repos across 85 criteria using GPT-4o - cutting review time by 90%.',
       'Unified OpenAI, Gemini, Groq, Anthropic, and OpenRouter into a single multi-LLM routing layer, reducing costs by 35% via concurrent batch processing.',
       'Built production MLOps pipelines (Docker, AWS Lambda, GitHub Actions) achieving 99.9% uptime; established CI/CD and IaC standards adopted team-wide.',
     ],

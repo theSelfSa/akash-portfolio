@@ -1,5 +1,5 @@
 /**
- * Education Section — timeline card style matching Experience section
+ * Education Section - timeline card style matching Experience section
  * Design: Premium Minimal with Spatial Depth
  */
 
@@ -42,7 +42,7 @@ export default function Education() {
     <section id="education" className="section-padding">
       <div className="container">
 
-        {/* Section header — matches Experience style */}
+        {/* Section header - matches Experience style */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -56,11 +56,11 @@ export default function Education() {
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">Education</h2>
           <p className="text-muted-foreground mt-2 text-sm">
-            Computer science built across two continents — from core engineering to graduate-level AI research.
+            Computer science built across two continents - from core engineering to graduate-level AI research.
           </p>
         </motion.div>
 
-        {/* Timeline — identical structure to Experience */}
+        {/* Timeline - identical structure to Experience */}
         <div className="relative">
           {/* Vertical line */}
           <div className="absolute left-4 sm:left-6 top-0 bottom-0 w-px bg-border" aria-hidden="true" />

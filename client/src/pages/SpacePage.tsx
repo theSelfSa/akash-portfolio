@@ -192,7 +192,7 @@ export default function SpacePage() {
               animate={{ opacity: 1 }}
               className="text-center py-20 text-muted-foreground"
             >
-              <p className="text-sm">Nothing here yet — check back soon.</p>
+              <p className="text-sm">Nothing here yet - check back soon.</p>
             </motion.div>
           ) : (
             <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

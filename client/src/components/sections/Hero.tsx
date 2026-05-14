@@ -1,6 +1,6 @@
 /**
  * Hero / Landing Section
- * Design: Asymmetric two-column layout — identity anchor left, substance right
+ * Design: Asymmetric two-column layout - identity anchor left, substance right
  *
  * Design principles applied:
  *   - F-pattern reading: eyes scan left → right, then down. Left column is the anchor.
@@ -8,7 +8,7 @@
  *   - Visual hierarchy: photo → name → title → credibility → substance → action
  *   - Faces before text: photo is the first thing eyes land on (hardwired human cognition)
  *   - Whitespace as design: generous spacing between groups signals intentionality
- *   - Skill tags: flat pills, no card backgrounds — information, not decoration
+ *   - Skill tags: flat pills, no card backgrounds - information, not decoration
  *
  * Layout:
  *   LEFT (30%): photo (circle) → green dot → location → open to relocation → F-1 OPT → social links
@@ -41,7 +41,7 @@ const featuredResume = personal.resumes[0] ?? {
 
 const metricIcons = [TrendingUp, DollarSign, Activity, Users];
 
-// Top skills to show as flat tags — curated, not exhaustive
+// Top skills to show as flat tags - curated, not exhaustive
 const heroSkills = [
   'Python', 'PyTorch', 'LLM Fine-tuning', 'RAG', 'FastAPI',
   'React', 'TypeScript', 'Docker', 'AWS', 'GitHub Actions',
@@ -60,7 +60,7 @@ export default function Hero() {
       >
         <AnimatedBackground />
 
-        {/* Main content — starts right below 64px navbar */}
+        {/* Main content - starts right below 64px navbar */}
         <div
           className="relative z-10 container"
           style={{ paddingTop: 'calc(4rem + 3rem)', paddingBottom: '5rem' }}
@@ -69,7 +69,7 @@ export default function Hero() {
           <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-10 lg:gap-16 items-start">
 
             {/* ══════════════════════════════════════
-                LEFT COLUMN — Identity anchor
+                LEFT COLUMN - Identity anchor
                 Narrow, compact, stays in peripheral
                 vision while right column is read
                 ══════════════════════════════════════ */}
@@ -115,7 +115,7 @@ export default function Hero() {
                 </div>
               </div>
 
-              {/* Social links — horizontal icon-only row, left-aligned */}
+              {/* Social links - horizontal icon-only row, left-aligned */}
               <div className="flex flex-row items-center justify-center gap-2 self-center">
                 <a
                   href={personal.github}
@@ -142,7 +142,7 @@ export default function Hero() {
                 </a>
               </div>
 
-              {/* CTA buttons — equal-width side-by-side row */}
+              {/* CTA buttons - equal-width side-by-side row */}
               <div className="flex flex-row items-center gap-2 w-full">
                 <button
                   onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
@@ -162,7 +162,7 @@ export default function Hero() {
             </motion.div>
 
             {/* ══════════════════════════════════════
-                RIGHT COLUMN — Substance
+                RIGHT COLUMN - Substance
                 Wide, rich, the actual content
                 ══════════════════════════════════════ */}
             <div className="flex flex-col gap-7">
@@ -180,7 +180,7 @@ export default function Hero() {
                 </p>
               </motion.div>
 
-              {/* Credibility line — current role + latest degree */}
+              {/* Credibility line - current role + latest degree */}
               <motion.div
                 custom={2} initial="hidden" animate="visible" variants={fadeUp}
                 className="flex flex-wrap gap-x-6 gap-y-2"
@@ -203,7 +203,7 @@ export default function Hero() {
                 {personal.summary}
               </motion.p>
 
-              {/* Metric cards — 2×2 grid */}
+              {/* Metric cards - 2×2 grid */}
               <motion.div
                 custom={4} initial="hidden" animate="visible" variants={fadeUp}
                 className="grid grid-cols-2 lg:grid-cols-4 gap-3"
@@ -244,7 +244,7 @@ export default function Hero() {
                 })}
               </motion.div>
 
-              {/* Skill tags — flat pills, no card backgrounds */}
+              {/* Skill tags - flat pills, no card backgrounds */}
               <motion.div
                 custom={5} initial="hidden" animate="visible" variants={fadeUp}
                 className="flex flex-wrap gap-2"

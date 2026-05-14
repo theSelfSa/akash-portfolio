@@ -1,21 +1,21 @@
 /**
- * AnimatedBackground — Premium hero background
+ * AnimatedBackground - Premium hero background
  * Design: Premium Minimal with Spatial Depth
  *
  * DARK MODE strategy: Glowing light particles on near-black → classic hacker-chic glow
  * LIGHT MODE strategy: Deep cool-slate base (not white) so particles have real contrast.
- *   The base is oklch(0.88 0.018 250) — a rich blue-grey like premium paper.
+ *   The base is oklch(0.88 0.018 250) - a rich blue-grey like premium paper.
  *   Particles are darker/more saturated, bloom gradients are stronger and more colourful.
  *
  * Layers (bottom to top):
- *   1. Base tint layer — sets the atmospheric background colour for light mode
+ *   1. Base tint layer - sets the atmospheric background colour for light mode
  *   2. Canvas: slow-drifting particle mesh with accent-coloured nodes + connecting lines
- *   3. Large radial gradient bloom — top-right corner, accent colour
- *   4. Secondary bloom — bottom-left, accent colour, offset phase
- *   5. Tertiary bloom — centre, subtle
- *   6. Fine dot grid overlay — adds texture and depth
- *   7. Directional vignette — edges pull inward for depth
- *   8. Bottom fade — smooth transition into next section
+ *   3. Large radial gradient bloom - top-right corner, accent colour
+ *   4. Secondary bloom - bottom-left, accent colour, offset phase
+ *   5. Tertiary bloom - centre, subtle
+ *   6. Fine dot grid overlay - adds texture and depth
+ *   7. Directional vignette - edges pull inward for depth
+ *   8. Bottom fade - smooth transition into next section
  */
 
 import { useEffect, useRef } from 'react';
@@ -109,7 +109,7 @@ export default function AnimatedBackground() {
         if (p.y > height) p.y = 0;
       }
 
-      // Draw connections — thicker lines in light mode
+      // Draw connections - thicker lines in light mode
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
@@ -161,7 +161,7 @@ export default function AnimatedBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
 
-      {/* Layer 0 (light only): Atmospheric tinted base — deep cool-slate so particles have contrast */}
+      {/* Layer 0 (light only): Atmospheric tinted base - deep cool-slate so particles have contrast */}
       {!isDark && (
         <div
           className="absolute inset-0"
@@ -178,7 +178,7 @@ export default function AnimatedBackground() {
         style={{ opacity: 1 }}
       />
 
-      {/* Layer 2: Large bloom — top-right */}
+      {/* Layer 2: Large bloom - top-right */}
       <div
         className="absolute rounded-full accent-transition"
         style={{
@@ -196,7 +196,7 @@ export default function AnimatedBackground() {
         }}
       />
 
-      {/* Layer 3: Secondary bloom — bottom-left */}
+      {/* Layer 3: Secondary bloom - bottom-left */}
       <div
         className="absolute rounded-full accent-transition"
         style={{
@@ -214,7 +214,7 @@ export default function AnimatedBackground() {
         }}
       />
 
-      {/* Layer 4: Tertiary bloom — centre-right */}
+      {/* Layer 4: Tertiary bloom - centre-right */}
       <div
         className="absolute rounded-full accent-transition"
         style={{
@@ -232,7 +232,7 @@ export default function AnimatedBackground() {
         }}
       />
 
-      {/* Layer 5: Fine dot grid — texture */}
+      {/* Layer 5: Fine dot grid - texture */}
       <div
         className="absolute inset-0"
         style={{
@@ -241,7 +241,7 @@ export default function AnimatedBackground() {
         }}
       />
 
-      {/* Layer 6: Directional vignette — pulls edges inward for depth */}
+      {/* Layer 6: Directional vignette - pulls edges inward for depth */}
       <div
         className="absolute inset-0"
         style={{
@@ -251,7 +251,7 @@ export default function AnimatedBackground() {
         }}
       />
 
-      {/* Layer 7: Top edge fade — blends into navbar */}
+      {/* Layer 7: Top edge fade - blends into navbar */}
       <div
         className="absolute top-0 left-0 right-0"
         style={{

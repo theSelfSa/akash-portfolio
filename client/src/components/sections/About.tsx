@@ -1,9 +1,9 @@
 /**
- * About Section — compact single-view layout
+ * About Section - compact single-view layout
  * Design: Premium Minimal with Spatial Depth
  * Left: bio paragraph + key skill chips
  * Right: education cards (compact) + interests row
- * Everything fits in one viewport — no second scroll needed.
+ * Everything fits in one viewport - no second scroll needed.
  */
 
 import { motion } from 'framer-motion';

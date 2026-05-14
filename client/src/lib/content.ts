@@ -1,5 +1,5 @@
 /**
- * Content Loader — reads MDX files from content/ directory
+ * Content Loader - reads MDX files from content/ directory
  * Uses Vite's import.meta.glob to statically import all content files at build time.
  * To add new content: create a .mdx file in content/projects/ or content/space/[category]/
  * No code changes needed.
@@ -48,7 +48,7 @@ export interface SpaceMeta extends SpaceFrontmatter {
 
 // ─── Raw MDX Modules ─────────────────────────────────────────────────────────
 
-// Vite glob import — all MDX files are imported statically at build time
+// Vite glob import - all MDX files are imported statically at build time
 // Paths are relative to this file (client/src/lib/), going up to project root then into content/
 const projectModules = import.meta.glob('../../../content/projects/*.mdx', {
   eager: true,

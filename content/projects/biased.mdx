@@ -20,17 +20,17 @@ metrics:
 
 B.I.A.S.E.D. (Bias-Informed AI System for Evidence-based Decisions) is an open-source AI decision intelligence platform designed to surface evidence, highlight cognitive biases, and support structured reasoning for complex decisions. The system combines a RAG (Retrieval-Augmented Generation) pipeline with a multi-LLM routing layer to provide grounded, cited responses.
 
-The project was built as a full-stack monorepo — frontend, backend, and ML pipeline in a single repository — to demonstrate production-grade software architecture patterns alongside deep ML engineering.
+The project was built as a full-stack monorepo - frontend, backend, and ML pipeline in a single repository - to demonstrate production-grade software architecture patterns alongside deep ML engineering.
 
 ## Technical Architecture
 
 The system is composed of three main layers:
 
-**1. Ingestion Pipeline** — Documents, articles, and structured knowledge are chunked, embedded using OpenAI's `text-embedding-3-small` model, and stored in a pgvector-enabled PostgreSQL database. The chunking strategy uses semantic sentence boundaries rather than fixed token windows to preserve context integrity.
+**1. Ingestion Pipeline** - Documents, articles, and structured knowledge are chunked, embedded using OpenAI's `text-embedding-3-small` model, and stored in a pgvector-enabled PostgreSQL database. The chunking strategy uses semantic sentence boundaries rather than fixed token windows to preserve context integrity.
 
-**2. RAG Retrieval Layer** — At query time, the user's input is embedded and a cosine similarity search retrieves the top-k relevant chunks from pgvector. These chunks are injected into the LLM prompt as grounded context, with source citations preserved.
+**2. RAG Retrieval Layer** - At query time, the user's input is embedded and a cosine similarity search retrieves the top-k relevant chunks from pgvector. These chunks are injected into the LLM prompt as grounded context, with source citations preserved.
 
-**3. Multi-LLM Routing** — Rather than hardcoding a single provider, the system routes queries across OpenAI, Gemini, Groq, Anthropic, and OpenRouter based on task type, cost, and latency requirements. This was implemented as a unified abstraction layer with a consistent interface regardless of provider.
+**3. Multi-LLM Routing** - Rather than hardcoding a single provider, the system routes queries across OpenAI, Gemini, Groq, Anthropic, and OpenRouter based on task type, cost, and latency requirements. This was implemented as a unified abstraction layer with a consistent interface regardless of provider.
 
 ## Key Engineering Decisions
 
@@ -44,8 +44,8 @@ The system is composed of three main layers:
 
 The most significant challenge was managing context window limits when multiple retrieved chunks were injected into the prompt. The solution was a re-ranking step that scores retrieved chunks by relevance to the specific query (not just semantic similarity to the embedding) before selecting the final context window contents.
 
-Another non-trivial challenge was building the multi-LLM abstraction layer in a way that was genuinely provider-agnostic — different providers have different streaming APIs, rate limit behaviors, and error formats. The final implementation uses a strategy pattern with per-provider adapters behind a unified interface.
+Another non-trivial challenge was building the multi-LLM abstraction layer in a way that was genuinely provider-agnostic - different providers have different streaming APIs, rate limit behaviors, and error formats. The final implementation uses a strategy pattern with per-provider adapters behind a unified interface.
 
 ## What I Would Do Differently
 
-With more time, I would add a proper evaluation framework — automated tests that measure RAG retrieval quality (precision@k, recall@k) and LLM response quality (faithfulness, answer relevance) using a held-out test set. This is standard practice in production ML systems and is the clearest gap in the current implementation.
+With more time, I would add a proper evaluation framework - automated tests that measure RAG retrieval quality (precision@k, recall@k) and LLM response quality (faithfulness, answer relevance) using a held-out test set. This is standard practice in production ML systems and is the clearest gap in the current implementation.

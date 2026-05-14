@@ -89,15 +89,15 @@
 }
 
 /* ============================================================
-   LIGHT THEME — Warm off-white base, clear card separation,
+   LIGHT THEME - Warm off-white base, clear card separation,
    strong typography hierarchy, accent pops on light surfaces
    ============================================================ */
 :root {
   --radius: 0.5rem;
-  /* Warm off-white — not pure white, gives depth and warmth */
+  /* Warm off-white - not pure white, gives depth and warmth */
   --background: oklch(0.97 0.003 250);
   --foreground: oklch(0.1 0.008 260);
-  /* Cards sit above background — clear surface separation */
+  /* Cards sit above background - clear surface separation */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.1 0.008 260);
   --popover: oklch(1 0 0);
@@ -108,13 +108,13 @@
   --secondary: oklch(0.93 0.005 260);
   --secondary-foreground: oklch(0.2 0.01 260);
   --muted: oklch(0.93 0.005 260);
-  /* Darker muted-foreground — reads as supporting text, not disabled */
+  /* Darker muted-foreground - reads as supporting text, not disabled */
   --muted-foreground: oklch(0.42 0.015 260);
   --accent: oklch(0.93 0.005 260);
   --accent-foreground: oklch(0.1 0.008 260);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  /* Stronger borders — visible on white cards */
+  /* Stronger borders - visible on white cards */
   --border: oklch(0.86 0.006 260);
   --input: oklch(0.86 0.006 260);
   --ring: oklch(0.52 0.2 264);
@@ -225,7 +225,7 @@
     }
   }
 
-  /* Accent color utilities — use these throughout components */
+  /* Accent color utilities - use these throughout components */
   .text-accent-brand {
     color: var(--accent-color);
   }
@@ -350,7 +350,7 @@
     width: 100%;
   }
 
-  /* Hero bloom drift animations — slow, organic, elegant */
+  /* Hero bloom drift animations - slow, organic, elegant */
   @keyframes bloom-drift-1 {
     0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
     25% { transform: translate(-35px, 45px) scale(1.06); opacity: 0.85; }
@@ -368,7 +368,7 @@
     40% { transform: translate(-40px, -25px) scale(1.12); opacity: 0.75; }
     70% { transform: translate(25px, 35px) scale(0.9); opacity: 0.88; }
   }
-  /* Legacy orb drift — kept for compatibility */
+  /* Legacy orb drift - kept for compatibility */
   @keyframes orb-drift-1 {
     0%, 100% { transform: translate(0, 0) scale(1); }
     33% { transform: translate(-40px, 30px) scale(1.08); }

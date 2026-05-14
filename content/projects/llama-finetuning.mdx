@@ -18,17 +18,17 @@ metrics:
 
 ## Overview
 
-This project implements a complete, production-grade fine-tuning pipeline for Meta's LLaMA-3 family of models using Parameter-Efficient Fine-Tuning (PEFT) techniques — specifically LoRA and QLoRA. The goal was to build a pipeline that could be applied to any instruction-following or domain-adaptation task without rewriting core infrastructure.
+This project implements a complete, production-grade fine-tuning pipeline for Meta's LLaMA-3 family of models using Parameter-Efficient Fine-Tuning (PEFT) techniques - specifically LoRA and QLoRA. The goal was to build a pipeline that could be applied to any instruction-following or domain-adaptation task without rewriting core infrastructure.
 
 The pipeline handles the full lifecycle: dataset preprocessing, tokenization, training with gradient checkpointing, evaluation, and model export in formats compatible with vLLM and Ollama for inference.
 
 ## Why PEFT / QLoRA?
 
-Full fine-tuning of a 7B or 13B parameter model requires 40–80GB of VRAM — hardware accessible only to well-funded labs. QLoRA (Quantized LoRA) makes fine-tuning accessible on consumer-grade hardware (a single A100 or even a 4090) by:
+Full fine-tuning of a 7B or 13B parameter model requires 40–80GB of VRAM - hardware accessible only to well-funded labs. QLoRA (Quantized LoRA) makes fine-tuning accessible on consumer-grade hardware (a single A100 or even a 4090) by:
 
 1. **Quantizing** the base model weights to 4-bit precision (NF4 format), reducing memory by ~70%
-2. **Freezing** all base model weights — no gradients are computed for them
-3. **Adding low-rank adapter matrices** (LoRA) to the attention layers — only these small matrices are trained
+2. **Freezing** all base model weights - no gradients are computed for them
+3. **Adding low-rank adapter matrices** (LoRA) to the attention layers - only these small matrices are trained
 
 The result is a fine-tuned model that performs comparably to full fine-tuning at a fraction of the compute cost, with the adapter weights stored as a small separate file (~100MB) rather than a full model copy.
 
@@ -48,7 +48,7 @@ Model Export (merged weights or adapter-only)
 Inference (vLLM / Ollama / HuggingFace)
 ```
 
-The pipeline is fully configurable via a YAML config file — model size, LoRA rank, learning rate schedule, dataset path, and evaluation frequency are all parameters, not hardcoded values.
+The pipeline is fully configurable via a YAML config file - model size, LoRA rank, learning rate schedule, dataset path, and evaluation frequency are all parameters, not hardcoded values.
 
 ## Experiment Tracking
 
@@ -58,4 +58,4 @@ All training runs are tracked in Weights & Biases (WandB), logging: training los
 
 The most important practical insight from this project: **data quality dominates model size**. A 7B model fine-tuned on 5,000 high-quality, carefully formatted examples consistently outperforms a 13B model fine-tuned on 50,000 noisy examples. The data curation and formatting step deserves at least as much engineering attention as the training infrastructure itself.
 
-The second key insight: **the prompt template matters enormously**. LLaMA-3 uses a specific chat template format, and deviating from it — even slightly — causes the model to produce malformed outputs. Strict adherence to the official template and consistent formatting across train/eval/inference is non-negotiable.
+The second key insight: **the prompt template matters enormously**. LLaMA-3 uses a specific chat template format, and deviating from it - even slightly - causes the model to produce malformed outputs. Strict adherence to the official template and consistent formatting across train/eval/inference is non-negotiable.

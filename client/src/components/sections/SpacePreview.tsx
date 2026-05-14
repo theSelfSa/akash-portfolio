@@ -1,5 +1,5 @@
 /**
- * Space Preview Section — home page teaser for /space
+ * Space Preview Section - home page teaser for /space
  * Shows 3 most recent items across all categories.
  * Design: Premium Minimal with Spatial Depth
  */
@@ -104,7 +104,7 @@ export default function SpacePreview() {
               <div className="h-px flex-1 max-w-12 bg-accent-brand opacity-40 accent-transition" />
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">My Space</h2>
-            <p className="text-muted-foreground mt-2 text-sm">Books, music, articles, and thoughts — beyond the code.</p>
+            <p className="text-muted-foreground mt-2 text-sm">Books, music, articles, and thoughts - beyond the code.</p>
           </div>
           <Link
             href="/space"

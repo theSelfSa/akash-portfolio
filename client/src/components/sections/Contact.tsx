@@ -60,7 +60,7 @@ export default function Contact() {
               If you have an opportunity that aligns with my background, I'd love to hear from you.
             </p>
             <p className="text-base text-muted-foreground leading-relaxed">
-              Whether it's a quick question about my work, a project collaboration, or a job opportunity — my inbox is always open.
+              Whether it's a quick question about my work, a project collaboration, or a job opportunity - my inbox is always open.
             </p>
 
             {/* Location */}

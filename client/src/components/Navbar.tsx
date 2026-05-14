@@ -1,5 +1,5 @@
 /**
- * Navbar — top navigation with theme toggle, accent picker, and smooth scroll
+ * Navbar - top navigation with theme toggle, accent picker, and smooth scroll
  * Design: Premium Minimal with Spatial Depth
  * - Primary nav: Experience, Projects, Skills, Contact, My Space
  * - Right controls: Accent picker + Theme toggle (always visible)
@@ -72,7 +72,7 @@ export default function Navbar() {
         <div className="container">
           <div className="flex items-center justify-between h-16 gap-6">
 
-            {/* Logo — clean wordmark */}
+            {/* Logo - clean wordmark */}
             <Link
               href="/"
               className="flex-shrink-0 group"
@@ -82,7 +82,7 @@ export default function Navbar() {
               </span>
             </Link>
 
-            {/* Desktop Nav — centered */}
+            {/* Desktop Nav - centered */}
             <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center" aria-label="Main navigation">
               {navLinks.map((link) => (
                 <a
@@ -94,7 +94,7 @@ export default function Navbar() {
                   {link.label}
                 </a>
               ))}
-              {/* My Space — in main nav with subtle styling */}
+              {/* My Space - in main nav with subtle styling */}
               <Link
                 href="/space"
                 className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-accent-brand transition-colors duration-200 accent-transition rounded-md hover:bg-muted whitespace-nowrap"
@@ -132,7 +132,7 @@ export default function Navbar() {
                 ))}
               </div>
 
-              {/* Theme Toggle — always visible */}
+              {/* Theme Toggle - always visible */}
               <button
                 onClick={toggleTheme ?? undefined}
                 className="w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
@@ -142,7 +142,7 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Mobile right side: Say Hello + hamburger — always visible */}
+            {/* Mobile right side: Say Hello + hamburger - always visible */}
             <div className="md:hidden flex items-center gap-2">
               <a
                 href={`mailto:${personal.email}`}

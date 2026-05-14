@@ -1,12 +1,12 @@
 /**
- * Projects Section — 2-column card grid
+ * Projects Section - 2-column card grid
  * Design: Premium Minimal with Spatial Depth
  * - Each card has an image banner with gradient overlay
  * - Full card is clickable → /projects/[slug]
  * - GitHub + Live links are separate clickable elements (stopPropagation)
  * - Graceful fallback if no coverImage: accent-colored abstract gradient
  * - Hover: lift + border glow + image zoom + reveal arrow
- * To add a project: create content/projects/[slug].mdx — no code changes needed.
+ * To add a project: create content/projects/[slug].mdx - no code changes needed.
  */
 
 import { motion } from 'framer-motion';
@@ -121,17 +121,17 @@ function ProjectCard({ project, idx }: { project: ReturnType<typeof getFeaturedP
           </div>
         )}
 
-        {/* Gradient overlay — fades image into card body */}
+        {/* Gradient overlay - fades image into card body */}
         <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
 
-        {/* Category badge — top-left */}
+        {/* Category badge - top-left */}
         <div className="absolute top-3 left-3">
           <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-gradient-to-r border backdrop-blur-sm ${catColor}`}>
             {categoryLabel[project.category] ?? project.category}
           </span>
         </div>
 
-        {/* Date — top-right */}
+        {/* Date - top-right */}
         <div className="absolute top-3 right-3">
           <span className="font-mono-custom text-xs text-white/60 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-md">
             {project.date}
@@ -151,7 +151,7 @@ function ProjectCard({ project, idx }: { project: ReturnType<typeof getFeaturedP
           )}
         </div>
 
-        {/* Metrics — key impact stats */}
+        {/* Metrics - key impact stats */}
         {project.metrics && project.metrics.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {project.metrics.slice(0, 3).map((metric) => (
