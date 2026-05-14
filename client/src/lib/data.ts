@@ -130,7 +130,7 @@ export const experience: Experience[] = [
     id: 'tata',
     company: 'TATA Research, Development and Design Center',
     role: 'Research Intern',
-    type: 'research intern',
+    type: 'research',
     period: 'May 2020 – Jul. 2020',
     location: 'Pune, India',
     highlights: [
