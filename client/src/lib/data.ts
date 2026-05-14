@@ -19,7 +19,7 @@ export const personal = {
   currentRole: 'AI Software Engineer @ Ready Tensor',
   latestDegree: 'M.S. Computer Science, NC State · 2025',
   profilePhoto: '/assets/Akash_Kore_Profile.png',
-  summary: `Applied AI & Software Engineer with 4+ years of experience shipping production AI systems — LLM fine-tuning pipelines, RAG platforms, agentic workflows, and cloud-native backend infrastructure. I've delivered measurable impact at Ready Tensor, Siemens, and JAEA, working at the intersection of AI research and production engineering where clean architecture meets real-world constraints.`,
+  summary: `Applied AI & Software Engineer with 4+ years of experience shipping production AI systems, LLM fine-tuning pipelines, RAG platforms, agentic workflows, and cloud-native backend infrastructure. I've delivered measurable impact at Ready Tensor, Siemens, and JAEA, working at the intersection of AI research and production engineering where clean architecture meets real-world constraints.`,
   heroMetrics: [
     {
       value: '90%',
@@ -130,7 +130,7 @@ export const experience: Experience[] = [
     id: 'tata',
     company: 'TATA Research, Development and Design Center',
     role: 'Research Intern',
-    type: 'research',
+    type: 'research intern',
     period: 'May 2020 – Jul. 2020',
     location: 'Pune, India',
     highlights: [

@@ -48,7 +48,7 @@ export default function Footer() {
 
           {/* Copyright */}
           <div className="text-xs text-muted-foreground text-center sm:text-right">
-            © {year} {personal.name}. Designed & built with care.
+            © {year} {personal.name}.
           </div>
         </div>
       </div>
