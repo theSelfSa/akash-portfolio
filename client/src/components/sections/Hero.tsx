@@ -78,7 +78,7 @@ export default function Hero() {
               className="flex flex-col items-start gap-4 lg:sticky lg:top-24"
             >
               {/* Profile photo */}
-              <div className="relative">
+              <div className="relative self-center">
                 <div
                   className="w-36 h-36 lg:w-44 lg:h-44 rounded-full overflow-hidden border-2 border-border bg-muted flex items-center justify-center"
                   style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
@@ -116,7 +116,7 @@ export default function Hero() {
               </div>
 
               {/* Social links — horizontal icon-only row, left-aligned */}
-              <div className="flex flex-row items-center gap-2">
+              <div className="flex flex-row items-center justify-center gap-2 self-center">
                 <a
                   href={personal.github}
                   target="_blank" rel="noopener noreferrer"

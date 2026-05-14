@@ -11,6 +11,7 @@
 
 import { motion } from 'framer-motion';
 import { Github, ExternalLink, ArrowUpRight, Zap } from 'lucide-react';
+import { useLocation } from 'wouter';
 import { getFeaturedProjects } from '@/lib/content';
 
 const categoryLabel: Record<string, string> = {
@@ -84,9 +85,10 @@ export default function Projects() {
 function ProjectCard({ project, idx }: { project: ReturnType<typeof getFeaturedProjects>[0]; idx: number }) {
   const catColor = categoryColor[project.category] ?? categoryColor['ai-ml'];
   const fallbackGrad = fallbackGradients[idx % fallbackGradients.length];
+  const [, navigate] = useLocation();
 
   function handleCardClick() {
-    window.location.href = `/projects/${project.slug}`;
+    navigate(`/projects/${project.slug}`);
   }
 
   return (
