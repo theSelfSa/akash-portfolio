@@ -100,12 +100,12 @@ export default function Hero() {
               </div>
 
               {/* Location + availability meta */}
-              <div className="flex flex-col items-start gap-1.5">
-                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <div className="flex flex-col items-center gap-1.5 self-center text-center">
+                <div className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground">
                   <MapPin size={13} className="flex-shrink-0 text-muted-foreground/60" />
                   <span>Raleigh, NC · Open to relocation</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground/70 font-medium">
+                <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground/70 font-medium">
                   {/* Subtle availability indicator: soft green ring + inner dot with slow ping */}
                   <span className="relative flex-shrink-0 w-2.5 h-2.5" aria-hidden="true">
                     <span className="absolute inset-0 rounded-full bg-emerald-500/25 animate-ping" style={{ animationDuration: '2.8s' }} />
