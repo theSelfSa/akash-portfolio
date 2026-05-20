@@ -7,8 +7,8 @@
 export const personal = {
   name: 'Akash Kore',
   firstName: 'Akash',
-  title: 'AI Software Engineer',
-  tagline: 'Building AI Systems That Actually Ship.',
+  title: 'AI Software Engineer | ML Systems & Agentic AI',
+  tagline: 'Building Production AI Systems That Actually Ship.',
   location: 'Raleigh, NC',
   email: 'aakashkore@gmail.com',
   phone: '(919) 559-4937',
@@ -90,7 +90,7 @@ export const experience: Experience[] = [
       'Built and shipped readytensor (PyPI): an LLM evaluation and observability framework scoring AI/ML repos across 85 criteria via GPT-4o with structured outputs (Instructor) and seeded, deterministic inference — cutting ML review time by 90%.',
       'Engineered a multi-LLM routing layer (OpenAI, Gemini, Groq, Anthropic, OpenRouter) with function calling, tool use, and LangChain orchestration; reduced inference costs by 35% across a 10-person team.',
       'Built production MLOps pipelines (Docker, AWS Lambda, GitHub Actions CI/CD) achieving 99.9% uptime; executed zero-downtime migrations and established IaC standards adopted team-wide.',
-      'Developed and shipped a full authentication system (OAuth 2.0, email verification, RBAC, localization) supporting a platform-wide migration for 5,000+ users.',
+      'Developed and shipped a full authentication system (OAuth 2.0, email verification, RBAC, localization) supporting a platform-wide migration for 50,000+ users.',
     ],
     tags: ['Python', 'LangChain', 'LangGraph', 'MCP', 'GPT-4o', 'Instructor', 'vLLM', 'Docker', 'AWS Lambda', 'GitHub Actions', 'FastAPI'],
   },
@@ -147,7 +147,6 @@ export const projects: Project[] = [
     longDescription: `B.I.A.S.E.D. is an open-source agentic decision intelligence platform built on a pnpm monorepo architecture. At its core is an MCP server enabling external tool integration, and a LangGraph multi-agent orchestration layer that routes queries across local Ollama or cloud LLMs. The RAG engine retrieves evidence from pgvector and returns structured outputs with citations and confidence traces. Built with RBAC auth, Docker Compose deployment, and a scenario planning engine for multi-hypothesis decision support. Released under Apache-2.0.`,
     tags: ['FastAPI', 'Next.js', 'LangGraph', 'LangChain', 'MCP', 'pgvector', 'Ollama', 'Docker', 'RAG', 'TypeScript'],
     github: 'https://github.com/TheSelfSa/biased',
-    demo: 'https://akashkore.com',
     featured: true,
     metrics: ['MCP server with external tool integration', 'LangGraph multi-agent orchestration', 'pgvector RAG retrieval', 'Apache-2.0 open-source'],
     category: 'ai-ml',
@@ -246,7 +245,7 @@ export const stats = [
   { value: '4+', label: 'Years Experience' },
   { value: '90%', label: 'ML Review Time Cut' },
   { value: '35%', label: 'Inference Cost Saved' },
-  { value: '5,000+', label: 'Users Migrated' },
+  { value: '50,000+', label: 'Users Migrated' },
 ];
 
 export const openSource = [
@@ -254,7 +253,6 @@ export const openSource = [
     name: 'readytensor',
     description: 'LLM evaluation and observability framework that scores AI/ML repositories across 85 criteria using GPT-4o with seeded, deterministic inference. Cuts expert review time by 90%.',
     link: 'https://pypi.org/project/readytensor',
-    github: 'https://github.com/TheSelfSa/readytensor',
     platform: 'PyPI',
     tags: ['Python', 'GPT-4o', 'LLM Evaluation', 'Structured Outputs', 'Observability'],
     metric: '90% reduction in expert review time',
@@ -279,7 +277,7 @@ export const achievements = [
   },
   {
     title: 'JAEA Research Internship',
-    organization: 'Japan Atomic Energy Agency — Japan\'s national nuclear research lab',
+    organization: "Japan Atomic Energy Agency — Japan's national nuclear research lab",
     year: '2024',
     description: 'Built and deployed a production computer vision pipeline for nuclear reactor inspection from scratch — 90% detection accuracy, live on AWS Lambda at 15 FPS.',
   },
