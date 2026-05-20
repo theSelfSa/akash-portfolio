@@ -56,6 +56,12 @@ export const personal = {
     { icon: 'code', text: 'Python, FastAPI, PyTorch, vLLM, LoRA/QLoRA fine-tuning' },
     { icon: 'chart', text: '4+ years · Ready Tensor, Siemens, JAEA' },
   ],
+  heroSkills: [
+    'Python', 'PyTorch', 'MCP', 'LangGraph', 'LangChain',
+    'LLM Fine-Tuning (LoRA/QLoRA)', 'RAG', 'FastAPI',
+    'Docker', 'AWS', 'GitHub Actions CI/CD',
+    'GPT-4o', 'MLOps', 'vLLM',
+  ],
   resumes: [
     { role: 'AI Software Engineer', file: '/assets/Akash_Kore_Resume.pdf' },
   ],

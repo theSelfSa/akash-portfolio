@@ -41,13 +41,6 @@ const featuredResume = personal.resumes[0] ?? {
 
 const metricIcons = [TrendingUp, DollarSign, Activity, Users];
 
-// Top skills to show as flat tags - curated, not exhaustive
-const heroSkills = [
-  'Python', 'PyTorch', 'LLM Fine-tuning', 'RAG', 'FastAPI',
-  'React', 'TypeScript', 'Docker', 'AWS', 'GitHub Actions',
-  'GPT-4o', 'MLOps', 'Computer Vision',
-];
-
 export default function Hero() {
   const [pdfOpen, setPdfOpen] = useState(false);
 
@@ -103,7 +96,7 @@ export default function Hero() {
               <div className="flex flex-col items-center gap-1.5 self-center text-center">
                 <div className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground">
                   <MapPin size={13} className="flex-shrink-0 text-muted-foreground/60" />
-                  <span>Raleigh, NC · Open to relocation</span>
+                  <span>{personal.location}</span>
                 </div>
                 <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground/70 font-medium">
                   {/* Subtle availability indicator: soft green ring + inner dot with slow ping */}
@@ -111,7 +104,7 @@ export default function Hero() {
                     <span className="absolute inset-0 rounded-full bg-emerald-500/25 animate-ping" style={{ animationDuration: '2.8s' }} />
                     <span className="relative block w-2.5 h-2.5 rounded-full bg-emerald-400/70 ring-1 ring-emerald-500/30" />
                   </span>
-                  <span>F-1 STEM OPT · Open to full-time roles</span>
+                  <span>{personal.availabilityNote}</span>
                 </div>
               </div>
 
@@ -249,7 +242,7 @@ export default function Hero() {
                 custom={5} initial="hidden" animate="visible" variants={fadeUp}
                 className="flex flex-wrap gap-2"
               >
-                {heroSkills.map((skill) => (
+                {personal.heroSkills.map((skill) => (
                   <span
                     key={skill}
                     className="px-2.5 py-1 rounded-full text-[11px] font-medium border border-border text-muted-foreground hover:border-accent-brand hover:text-accent-brand transition-all duration-200 accent-transition cursor-default"
