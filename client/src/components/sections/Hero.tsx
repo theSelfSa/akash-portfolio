@@ -43,6 +43,7 @@ const metricIcons = [TrendingUp, DollarSign, Activity, Users];
 
 export default function Hero() {
   const [pdfOpen, setPdfOpen] = useState(false);
+  const [availabilityPrimary, availabilitySecondary] = personal.availabilityNote.split('\n');
 
   return (
     <>
@@ -98,13 +99,16 @@ export default function Hero() {
                   <MapPin size={13} className="flex-shrink-0 text-muted-foreground/60" />
                   <span>{personal.location}</span>
                 </div>
-                <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground/70 font-medium">
+                <div className="flex items-start justify-center gap-1.5 text-xs text-muted-foreground/70 font-medium">
                   {/* Subtle availability indicator: soft green ring + inner dot with slow ping */}
-                  <span className="relative flex-shrink-0 w-2.5 h-2.5" aria-hidden="true">
+                  <span className="relative flex-shrink-0 w-2.5 h-2.5 mt-1" aria-hidden="true">
                     <span className="absolute inset-0 rounded-full bg-emerald-500/25 animate-ping" style={{ animationDuration: '2.8s' }} />
                     <span className="relative block w-2.5 h-2.5 rounded-full bg-emerald-400/70 ring-1 ring-emerald-500/30" />
                   </span>
-                  <span>{personal.availabilityNote}</span>
+                  <span className="leading-tight text-left">
+                    <span className="block">{availabilityPrimary}</span>
+                    {availabilitySecondary ? <span className="block">{availabilitySecondary}</span> : null}
+                  </span>
                 </div>
               </div>
 
