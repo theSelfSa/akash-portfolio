@@ -7,7 +7,7 @@
 export const personal = {
   name: 'Akash Kore',
   firstName: 'Akash',
-  title: 'Agentic AI Engineer',
+  title: 'AI Software Engineer',
   tagline: 'Building AI Systems That Actually Ship.',
   location: 'Raleigh, NC',
   email: 'aakashkore@gmail.com',
@@ -19,7 +19,7 @@ export const personal = {
   currentRole: 'AI Software Engineer @ Ready Tensor',
   latestDegree: 'M.S. Computer Science, NC State · 2025',
   profilePhoto: '/assets/Akash_Kore_Profile.png',
-  summary: `Agentic AI Engineer with 4+ years of experience building production AI systems: MCP servers, multi-agent agentic workflows (LangChain, LangGraph), RAG pipelines, and LLM fine-tuning (LoRA/QLoRA). Shipped systems delivering 90% reduction in ML review time, 35% inference cost savings, and 99.9% uptime across Ready Tensor, Siemens, and JAEA.`,
+  summary: `AI Software Engineer with 4+ years of experience building production AI systems: MCP servers, multi-agent agentic workflows (LangChain, LangGraph), RAG pipelines, and LLM fine-tuning (LoRA/QLoRA). Shipped systems delivering 90% reduction in ML review time, 35% inference cost savings, and 99.9% uptime across Ready Tensor, Siemens, and JAEA.`,
   heroMetrics: [
     {
       value: '90%',
@@ -43,21 +43,21 @@ export const personal = {
       tag: 'AWS · Docker · CI/CD',
     },
     {
-      value: '500+',
-      label: 'Enterprise Customers',
-      description: 'Engineered Teamcenter on Cloud at Siemens, a globally deployed SaaS platform serving 500+ enterprise customers with distributed AWS infrastructure.',
-      source: 'Siemens Teamcenter on Cloud',
-      tag: 'AWS · Distributed Systems',
+      value: '5,000+',
+      label: 'Users Migrated',
+      description: 'Shipped a full authentication system — OAuth 2.0, email verification, RBAC, and localization — supporting a platform-wide migration with zero data loss.',
+      source: 'Auth system · Ready Tensor',
+      tag: 'OAuth 2.0 · RBAC · Auth',
     },
   ],
   heroHighlights: [
-    { icon: 'brain', text: 'MCP servers, LangGraph agents, RAG pipelines' },
+    { icon: 'brain', text: 'MCP servers, LangGraph multi-agent systems, RAG pipelines' },
     { icon: 'cloud', text: 'Production MLOps — AWS, Docker, GitHub Actions CI/CD' },
-    { icon: 'code', text: 'Python, FastAPI, PyTorch, vLLM, LLM fine-tuning' },
+    { icon: 'code', text: 'Python, FastAPI, PyTorch, vLLM, LoRA/QLoRA fine-tuning' },
     { icon: 'chart', text: '4+ years · Ready Tensor, Siemens, JAEA' },
   ],
   resumes: [
-    { role: 'AI / ML Engineer', file: '/assets/Akash_Kore_Resume.pdf' },
+    { role: 'AI Software Engineer', file: '/assets/Akash_Kore_Resume.pdf' },
   ],
 };
 
@@ -86,7 +86,7 @@ export const experience: Experience[] = [
       'Built production MLOps pipelines (Docker, AWS Lambda, GitHub Actions CI/CD) achieving 99.9% uptime; executed zero-downtime migrations and established IaC standards adopted team-wide.',
       'Developed and shipped a full authentication system (OAuth 2.0, email verification, RBAC, localization) supporting a platform-wide migration for 5,000+ users.',
     ],
-    tags: ['Python', 'LangChain', 'LangGraph', 'MCP', 'GPT-4o', 'Docker', 'AWS Lambda', 'GitHub Actions', 'FastAPI'],
+    tags: ['Python', 'LangChain', 'LangGraph', 'MCP', 'GPT-4o', 'Instructor', 'vLLM', 'Docker', 'AWS Lambda', 'GitHub Actions', 'FastAPI'],
   },
   {
     id: 'jaea',
@@ -99,7 +99,7 @@ export const experience: Experience[] = [
       'Designed a computer vision pipeline for nuclear reactor bubble detection; selected Pix2Pix GAN (PyTorch) for sim-to-real domain adaptation under limited labeled-data constraints — 90% detection accuracy, 30% improved generalization.',
       'Curated a 50k-image labeled dataset; applied transfer learning fine-tuning; containerized the real-time inference pipeline (Docker, AWS Lambda) achieving 15 FPS and 95% overhead reduction.',
     ],
-    tags: ['PyTorch', 'Pix2Pix GAN', 'Computer Vision', 'Docker', 'AWS Lambda', 'Transfer Learning'],
+    tags: ['PyTorch', 'Pix2Pix GAN', 'Computer Vision', 'Transfer Learning', 'Docker', 'AWS Lambda', 'Domain Adaptation'],
   },
   {
     id: 'siemens',
@@ -112,7 +112,7 @@ export const experience: Experience[] = [
       'Engineered Teamcenter on Cloud (TcX) on AWS (EC2, S3, RDS, Lambda) for 500+ global enterprise customers; automated CI/CD via CloudFormation, cutting deployment setup time by 30%.',
       'Resolved 40+ critical production incidents across Python, C++, and Bash; refactored C++ server-side components — reducing bug resolution time by 25%.',
     ],
-    tags: ['C++', 'Python', 'AWS', 'CloudFormation', 'CI/CD', 'Distributed Systems'],
+    tags: ['C++', 'Python', 'Bash', 'AWS', 'CloudFormation', 'CI/CD', 'Distributed Systems', 'Agile'],
   },
 ];
 
@@ -141,8 +141,9 @@ export const projects: Project[] = [
     longDescription: `B.I.A.S.E.D. is an open-source agentic decision intelligence platform built on a pnpm monorepo architecture. At its core is an MCP server enabling external tool integration, and a LangGraph multi-agent orchestration layer that routes queries across local Ollama or cloud LLMs. The RAG engine retrieves evidence from pgvector and returns structured outputs with citations and confidence traces. Built with RBAC auth, Docker Compose deployment, and a scenario planning engine for multi-hypothesis decision support. Released under Apache-2.0.`,
     tags: ['FastAPI', 'Next.js', 'LangGraph', 'LangChain', 'MCP', 'pgvector', 'Ollama', 'Docker', 'RAG', 'TypeScript'],
     github: 'https://github.com/TheSelfSa/biased',
+    demo: 'https://akashkore.com',
     featured: true,
-    metrics: ['MCP server with external tool integration', 'LangGraph multi-agent orchestration', 'pgvector similarity search', 'Apache-2.0 open-source'],
+    metrics: ['MCP server with external tool integration', 'LangGraph multi-agent orchestration', 'pgvector RAG retrieval', 'Apache-2.0 open-source'],
     category: 'ai-ml',
   },
   {
@@ -152,7 +153,7 @@ export const projects: Project[] = [
     period: 'Jun. 2024 – Sep. 2024',
     description: 'Production LLaMA-3 fine-tuning pipeline using LoRA/QLoRA with Ray Tune hyperparameter search, Weights & Biases tracking, and vLLM inference deployment achieving 40% memory reduction.',
     longDescription: `A production-grade fine-tuning pipeline for LLaMA-3 using LoRA/QLoRA (PEFT) on domain-specific conversational data. Optimized hyperparameters with Ray Tune, tracked experiments via Weights & Biases, and evaluated against baseline using ROUGE-L and BERTScore. Deployed quantized inference endpoints via vLLM and FastAPI, achieving a 40% reduction in memory footprint. Serves as a production template for rapid foundation model adaptation.`,
-    tags: ['PyTorch', 'Hugging Face', 'LoRA', 'QLoRA', 'PEFT', 'Ray Tune', 'Weights & Biases', 'vLLM', 'FastAPI', 'LLaMA-3'],
+    tags: ['PyTorch', 'Hugging Face Transformers', 'LoRA', 'QLoRA', 'PEFT', 'LLaMA-3', 'Ray Tune', 'Weights & Biases', 'vLLM', 'FastAPI'],
     featured: true,
     metrics: ['40% memory footprint reduction', 'LoRA/QLoRA quantization', 'Ray Tune hyperparameter optimization', 'vLLM inference endpoints'],
     category: 'ai-ml',
@@ -186,7 +187,7 @@ export const skillGroups: SkillGroup[] = [
   {
     category: 'LLMs & GenAI',
     icon: '🧠',
-    skills: ['GPT-4o', 'LLaMA-3', 'Claude (Anthropic)', 'Gemini', 'LLM Fine-Tuning', 'LoRA / QLoRA', 'PEFT', 'RAG', 'LLM Observability', 'vLLM', 'Inference Optimization'],
+    skills: ['GPT-4o', 'LLaMA-3', 'Claude (Anthropic)', 'Gemini', 'OpenAI API', 'LLM Fine-Tuning (LoRA/QLoRA)', 'PEFT', 'Retrieval-Augmented Generation (RAG)', 'LLM Observability', 'vLLM', 'Inference Optimization'],
   },
   {
     category: 'AI / ML',
@@ -232,6 +233,61 @@ export const education = [
     school: 'Walchand College of Engineering',
     location: 'Sangli, MH, India',
     period: 'Aug. 2017 – Jul. 2021',
+  },
+];
+
+export const stats = [
+  { value: '4+', label: 'Years Experience' },
+  { value: '90%', label: 'ML Review Time Cut' },
+  { value: '35%', label: 'Inference Cost Saved' },
+  { value: '5,000+', label: 'Users Migrated' },
+];
+
+export const openSource = [
+  {
+    name: 'readytensor',
+    description: 'LLM evaluation and observability framework that scores AI/ML repositories across 85 criteria using GPT-4o with seeded, deterministic inference. Cuts expert review time by 90%.',
+    link: 'https://pypi.org/project/readytensor',
+    github: 'https://github.com/TheSelfSa/readytensor',
+    platform: 'PyPI',
+    tags: ['Python', 'GPT-4o', 'LLM Evaluation', 'Structured Outputs', 'Observability'],
+    metric: '90% reduction in expert review time',
+  },
+  {
+    name: 'B.I.A.S.E.D.',
+    description: 'Open-source agentic RAG decision intelligence platform with MCP server, LangGraph multi-agent orchestration, pgvector retrieval, and structured outputs with citations.',
+    link: 'https://github.com/TheSelfSa/biased',
+    github: 'https://github.com/TheSelfSa/biased',
+    platform: 'GitHub',
+    tags: ['MCP', 'LangGraph', 'RAG', 'pgvector', 'FastAPI', 'Next.js'],
+    metric: 'Apache-2.0 · Full-stack open-source',
+  },
+];
+
+export const achievements = [
+  {
+    title: 'M.S. Computer Science',
+    organization: 'North Carolina State University',
+    year: '2025',
+    description: 'Graduate degree focused on machine learning, distributed systems, and AI engineering.',
+  },
+  {
+    title: 'JAEA Research Internship',
+    organization: 'Japan Atomic Energy Agency — Japan\'s national nuclear research lab',
+    year: '2024',
+    description: 'Built and deployed a production computer vision pipeline for nuclear reactor inspection from scratch — 90% detection accuracy, live on AWS Lambda at 15 FPS.',
+  },
+  {
+    title: 'Enterprise Deployment at Global Scale',
+    organization: 'Siemens Digital Industries Software',
+    year: '2021 – 2023',
+    description: 'Engineered Teamcenter on Cloud serving 500+ enterprise customers globally across distributed AWS infrastructure.',
+  },
+  {
+    title: 'Open-Source PyPI Package',
+    organization: 'Ready Tensor',
+    year: '2024',
+    description: 'Shipped readytensor as a publicly available PyPI package — an LLM evaluation framework for AI/ML repository assessment at scale.',
   },
 ];
 
