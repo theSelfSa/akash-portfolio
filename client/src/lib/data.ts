@@ -43,7 +43,7 @@ export const personal = {
       tag: 'AWS · Docker · CI/CD',
     },
     {
-      value: '5,000+',
+      value: '50,000+',
       label: 'Users Migrated',
       description: 'Shipped a full authentication system — OAuth 2.0, email verification, RBAC, and localization — supporting a platform-wide migration with zero data loss.',
       source: 'Auth system · Ready Tensor',
