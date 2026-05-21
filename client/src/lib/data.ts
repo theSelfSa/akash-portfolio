@@ -19,7 +19,7 @@ export const personal = {
   currentRole: 'AI Software Engineer @ Ready Tensor',
   latestDegree: 'M.S. Computer Science, NC State · 2025',
   profilePhoto: '/assets/Akash_Kore_Profile.png',
-  summary: `AI Software Engineer with 4+ years of experience building production AI systems: MCP servers, multi-agent agentic workflows (LangChain, LangGraph), RAG pipelines, and LLM fine-tuning (LoRA/QLoRA). Shipped systems delivering 90% reduction in ML review time, 35% inference cost savings, and 99.9% uptime across Ready Tensor, Siemens, and JAEA.`,
+  summary: `AI Software Engineer with 3+ years of experience building production AI systems: MCP servers, multi-agent agentic workflows (LangChain, LangGraph), RAG pipelines, and LLM fine-tuning (LoRA/QLoRA). Shipped systems delivering 90% reduction in ML review time, 35% inference cost savings, and 99.9% uptime across Ready Tensor, Siemens, and JAEA.`,
   heroMetrics: [
     {
       value: '90%',
@@ -54,7 +54,7 @@ export const personal = {
     { icon: 'brain', text: 'MCP servers, LangGraph multi-agent systems, RAG pipelines' },
     { icon: 'cloud', text: 'Production MLOps — AWS, Docker, GitHub Actions CI/CD' },
     { icon: 'code', text: 'Python, FastAPI, PyTorch, vLLM, LoRA/QLoRA fine-tuning' },
-    { icon: 'chart', text: '4+ years · Ready Tensor, Siemens, JAEA' },
+    { icon: 'chart', text: '3+ years · Ready Tensor, Siemens, JAEA' },
   ],
   heroSkills: [
     'Python', 'PyTorch', 'MCP', 'LangGraph', 'LangChain',
@@ -84,7 +84,7 @@ export const experience: Experience[] = [
     company: 'Ready Tensor, Inc.',
     role: 'AI Software Engineer',
     type: 'full-time',
-    period: 'Aug. 2024 – Present',
+    period: 'Aug. 2025 – Present',
     location: 'San Diego, CA (Remote)',
     highlights: [
       'Built and shipped readytensor (PyPI): an LLM evaluation and observability framework scoring AI/ML repos across 85 criteria via GPT-4o with structured outputs (Instructor) and seeded, deterministic inference — cutting ML review time by 90%.',
@@ -242,7 +242,7 @@ export const education = [
 ];
 
 export const stats = [
-  { value: '4+', label: 'Years Experience' },
+  { value: '3+', label: 'Years Experience' },
   { value: '90%', label: 'ML Review Time Cut' },
   { value: '35%', label: 'Inference Cost Saved' },
   { value: '50,000+', label: 'Users Migrated' },

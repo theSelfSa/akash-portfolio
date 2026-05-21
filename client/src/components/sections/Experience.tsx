@@ -31,7 +31,7 @@ export default function Experience() {
             <div className="h-px flex-1 max-w-12 bg-accent-brand opacity-40 accent-transition" />
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">Experience</h2>
-          <p className="text-muted-foreground mt-2 text-sm">4+ years across AI/ML, backend engineering, and cloud infrastructure.</p>
+          <p className="text-muted-foreground mt-2 text-sm">3+ years across AI/ML, backend engineering, and cloud infrastructure.</p>
         </motion.div>
 
         {/* Timeline */}
