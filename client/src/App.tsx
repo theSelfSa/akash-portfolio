@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -8,8 +9,9 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AccentProvider } from "./contexts/AccentContext";
 import Home from "./pages/Home";
-import ProjectPage from "./pages/ProjectPage";
-import SpacePage from "./pages/SpacePage";
+
+const ProjectPage = lazy(() => import("./pages/ProjectPage"));
+const SpacePage = lazy(() => import("./pages/SpacePage"));
 
 function Router() {
   return (
@@ -33,7 +35,9 @@ function App() {
         <AccentProvider>
           <TooltipProvider>
             <Toaster />
-            <Router />
+            <Suspense fallback={null}>
+              <Router />
+            </Suspense>
             <Analytics />
             <SpeedInsights />
           </TooltipProvider>

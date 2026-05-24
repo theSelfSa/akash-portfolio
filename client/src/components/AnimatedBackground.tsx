@@ -65,9 +65,10 @@ export default function AnimatedBackground() {
       if (!canvas) return;
       width = canvas.offsetWidth;
       height = canvas.offsetHeight;
-      canvas.width = width * window.devicePixelRatio;
-      canvas.height = height * window.devicePixelRatio;
-      ctx!.scale(window.devicePixelRatio, window.devicePixelRatio);
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
       initParticles();
     }
 
@@ -88,6 +89,10 @@ export default function AnimatedBackground() {
 
     function draw() {
       if (!ctx) return;
+      if (document.hidden) {
+        animRef.current = 0;
+        return;
+      }
       ctx.clearRect(0, 0, width, height);
 
       const particles = particlesRef.current;
@@ -98,6 +103,7 @@ export default function AnimatedBackground() {
       const lineOpacity = isDark ? 0.2 : 0.38;
       const glowMultiplier = isDark ? 1 : 1.6; // bigger glow halo in light mode
       const connectionDist = Math.min(width, height) * (isDark ? 0.28 : 0.32);
+      const connectionDistSq = connectionDist * connectionDist;
 
       // Update positions
       for (const p of particles) {
@@ -114,8 +120,9 @@ export default function AnimatedBackground() {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < connectionDist) {
+          const distSq = dx * dx + dy * dy;
+          if (distSq < connectionDistSq) {
+            const dist = Math.sqrt(distSq);
             const alpha = lineOpacity * (1 - dist / connectionDist);
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
@@ -148,13 +155,22 @@ export default function AnimatedBackground() {
       animRef.current = requestAnimationFrame(draw);
     }
 
+    function handleVisibilityChange() {
+      if (!document.hidden && animRef.current === 0) {
+        animRef.current = requestAnimationFrame(draw);
+      }
+    }
+
     resize();
     window.addEventListener('resize', resize);
-    draw();
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    animRef.current = requestAnimationFrame(draw);
 
     return () => {
       window.removeEventListener('resize', resize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       cancelAnimationFrame(animRef.current);
+      animRef.current = 0;
     };
   }, [accent, theme, r, g, b, isDark]);
 
