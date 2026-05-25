@@ -13,6 +13,23 @@ metrics:
   - "44.4% total exact field match (up from 30.2% baseline)"
   - "Confidence routing: high → auto-complete, low → human review"
   - "Human-in-the-loop correction loop drives continuous improvement"
+images:
+  - src: "./images/receipt-transform.png"
+    alt: "Raw OCR text on the left transforming into structured JSON with per-field confidence scores on the right"
+    caption: "What OCR gives you vs. what you actually need"
+    placement: "after-ocr-explanation"
+  - src: "./images/confidence-routing.png"
+    alt: "Diagram showing receipts routed into three lanes based on confidence score: above 85% auto-completes, 65-85% flags fields, below 65% goes to full human review"
+    caption: "Confidence-based routing — the most important quality mechanism in the system"
+    placement: "after-confidence-table"
+  - src: "./images/learning-loop.png"
+    alt: "Cycle diagram: human review feeds corrections, corrections trigger LLM error analysis, analysis suggests prompt fixes, fixes improve extractions"
+    caption: "The active learning loop — manual review becomes training signal"
+    placement: "after-learning-loop-intro"
+  - src: "./images/benchmark-chart.png"
+    alt: "Bar chart comparing baseline vs tuned prompt performance across four metrics: success rate, total exact match, line-item price, line-item name"
+    caption: "Baseline vs. tuned prompt — 50-receipt CORD sample"
+    placement: "after-benchmark-table"
 ---
 
 ## The problem with "just use AI"
@@ -34,16 +51,23 @@ Most people's intuition is: "just take a photo, run it through AI, get the data.
 OCR — Optical Character Recognition — is the technology that turns an image of text into actual text your computer can work with. Think of it like a very fast typist who copies what they see, letter by letter. AWS Textract and Tesseract (the two OCR tools used here) are good at this. But they produce raw text, not structure.
 
 The raw text for that grocery receipt might look like:
+
 ```
 WHOLE FDS MKT
-CHKN BRST LB  6.79
-ORG MILK 2% GAL 5.49
+CHKN BRST LB    6.79
+ORG MILK 2% GAL  5.49
 SUB  12.28
 TAX   0.98
 TOTAL  13.26
 ```
 
 That is not a structured record. It's a block of text. Turning it into `{merchant: "Whole Foods Market", items: [{name: "Chicken Breast", price: 6.79}, ...]}` requires understanding — not just reading.
+
+<ImageEmbed
+  src="./images/receipt-transform.png"
+  alt="Raw OCR text on the left transforming into structured JSON with per-field confidence scores on the right"
+  caption="What OCR gives you (left) versus what you actually need (right) — with per-field confidence scores showing how certain the model is about each extraction"
+/>
 
 **Problem 2: Every receipt is different.**
 
@@ -119,6 +143,12 @@ The system computes an overall confidence score for the extraction. It combines:
 
 Based on this score, three things can happen:
 
+<ImageEmbed
+  src="./images/confidence-routing.png"
+  alt="Diagram showing receipts routed into three lanes: above 85% auto-completes, 65-85% flags specific fields, below 65% goes to full human review"
+  caption="Confidence-based routing — the core quality mechanism. A human's time is spent only where it matters."
+/>
+
 | Confidence level | What happens |
 |---|---|
 | **High** (above 85%) | Auto-complete. The receipt is stored and marked done. |
@@ -143,6 +173,12 @@ This is the same technology behind "search for anything and find relevant result
 
 Receipts that scored low confidence land in a review queue. A reviewer sees the original image side-by-side with the extracted data and can correct any field. These corrections are stored as ground truth.
 
+<ImageEmbed
+  src="./images/learning-loop.png"
+  alt="Cycle diagram showing four stages: human review, corrections stored, LLM error analysis finds patterns, prompt improved — all connected in a clockwise loop"
+  caption="The learning loop — manual review stops being a cost center and becomes an optimization engine"
+/>
+
 Nightly, the system runs an error analysis job. It pulls all corrections from the past week, groups them by type (date format errors, price misattributions, quantity parsing failures), and asks the AI to identify patterns. The output is a suggested prompt fix — a change to the instructions given to the extraction model that would prevent the same class of mistake next time.
 
 This is the learning loop. The system does not stay fixed at whatever quality it launched with. Human corrections become training signal, error analysis becomes prompt improvement, and the process repeats.
@@ -162,6 +198,12 @@ I ran a 50-receipt sample using Groq (a fast, low-cost inference provider) under
 | Line-item price exact | 22.6% | 34.4% |
 | Line-item name fuzzy | 40.9% | 36.7% |
 | Avg latency per receipt | 5.1s | 23.7s |
+
+<ImageEmbed
+  src="./images/benchmark-chart.png"
+  alt="Horizontal bar chart comparing baseline and tuned prompt across four metrics, showing green tuned bars extending further than gray baseline bars except for line-item name fuzzy match"
+  caption="One round of error analysis moved total exact match from 30% to 44% — at the cost of a 4x latency increase"
+/>
 
 A few things are worth noting honestly:
 
