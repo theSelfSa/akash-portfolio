@@ -1,6 +1,6 @@
 ---
 title: "Receipt Intelligence Pipeline"
-subtitle: "OCR + LLM + Human Review System for Real-World Receipt Automation"
+subtitle: "How I built a system that reads receipts, knows when it's unsure, and gets better over time"
 date: "2026-05"
 category: "ai-ml"
 tags: ["FastAPI", "Celery", "Redis", "PostgreSQL", "pgvector", "OCR", "Tesseract", "AWS Textract", "OpenAI", "Groq", "Pydantic", "Docker"]
@@ -9,269 +9,205 @@ demo: ""
 featured: true
 order: 4
 metrics:
-  - "Async receipt pipeline with confidence-based routing"
-  - "Hybrid OCR: Textract primary + Tesseract fallback"
-  - "Benchmarking modes: OpenAI, Groq, and local heuristic"
-  - "Human-in-the-loop correction + retraining loop"
+  - "90% success rate on CORD benchmark after prompt tuning"
+  - "44.4% total exact field match (up from 30.2% baseline)"
+  - "Confidence routing: high → auto-complete, low → human review"
+  - "Human-in-the-loop correction loop drives continuous improvement"
 ---
 
-## Introduction
+## The problem with "just use AI"
 
-Automating receipt processing looks simple until it meets real-world data: low-light photos, skewed scans, inconsistent layouts, abbreviations, missing fields, and vendor-specific formatting.  
-The Receipt Intelligence Pipeline was built to solve that exact gap between demo-friendly AI and production-grade document processing.
+Take a receipt from your last grocery run. Crumpled, photographed at an angle under fluorescent lights. The store's name is abbreviated. One item says `CHKN BRST LB` and costs `$6.79`. Another says `2% MILK GAL` but the price is cut off at the edge of the photo.
 
-At a high level, the platform ingests a receipt image or PDF, extracts raw text, converts that text into structured fields, evaluates confidence, and routes uncertain outputs for human correction. Over time, those corrections become learning signal that improves the system.
+Now imagine doing that for 13 million receipts every single day — which is roughly what Fetch Rewards, the rewards app, processes. At that scale, you cannot have a person check every extraction. But you also cannot blindly trust AI to get everything right. A system that confidently produces wrong answers is worse than one that admits uncertainty.
 
-This design intentionally prioritizes reliability, auditability, and continuous improvement over one-shot automation claims.
+That is the gap this project is designed to fill: not just extracting data from receipts, but knowing *when to trust the extraction* and *what to do when you don't*.
 
-## Problem statement and design goals
+---
 
-This project focuses on four practical goals:
+## Why receipt parsing is harder than it looks
 
-1. **Extract structured receipt data from noisy documents** with predictable schemas.
-2. **Scale processing asynchronously** so uploads remain responsive under load.
-3. **Protect data quality with confidence-aware review**, not blind auto-acceptance.
-4. **Create a feedback loop** where corrections drive measurable model improvement.
+Most people's intuition is: "just take a photo, run it through AI, get the data." That works fine for a demo. It breaks in production for a few specific reasons.
 
-These goals shape every architectural decision in the system.
+**Problem 1: OCR is just reading, not understanding.**
 
-## System architecture
+OCR — Optical Character Recognition — is the technology that turns an image of text into actual text your computer can work with. Think of it like a very fast typist who copies what they see, letter by letter. AWS Textract and Tesseract (the two OCR tools used here) are good at this. But they produce raw text, not structure.
 
-```mermaid
-flowchart LR
-    A[Upload receipt image/PDF] --> B[Preprocess image]
-    B --> C[OCR]
-    C --> D[Structured extraction]
-    D --> E[Confidence scoring]
-    E --> F[Catalog matching]
-    F --> G{Confidence level}
-    G -->|High| H[Auto-complete]
-    G -->|Medium/Low| I[Review queue]
-    I --> J[Human correction]
-    J --> K[Error analysis]
-    J --> L[Retraining run]
+The raw text for that grocery receipt might look like:
+```
+WHOLE FDS MKT
+CHKN BRST LB  6.79
+ORG MILK 2% GAL 5.49
+SUB  12.28
+TAX   0.98
+TOTAL  13.26
 ```
 
-```text
-Upload -> OCR -> Structured Parse -> Confidence -> Match -> Store
-                                          |
-                                          +-> High confidence   -> Auto-complete
-                                          +-> Medium confidence -> Field review
-                                          +-> Low confidence    -> Full review
+That is not a structured record. It's a block of text. Turning it into `{merchant: "Whole Foods Market", items: [{name: "Chicken Breast", price: 6.79}, ...]}` requires understanding — not just reading.
+
+**Problem 2: Every receipt is different.**
+
+Gas stations, pharmacies, restaurants, grocery stores, food trucks — they all format receipts differently. There is no standard. A quantity might be `2x`, `x2`, `2 EA`, or just `2`. A discount might be labeled `SAVE`, `DISC`, `OFF`, or have no label at all. A system that works perfectly on Walmart receipts might fail completely on a farmers market handwritten receipt.
+
+**Problem 3: AI can be confidently wrong.**
+
+Large language models (the AI behind ChatGPT and similar tools) are excellent at interpreting ambiguous text. But they can also hallucinate — produce a plausible-sounding answer that is factually wrong. If a receipt's total is cut off and the model guesses `$24.50` when the actual total was `$42.50`, a financial app silently gets the wrong number. With no confidence tracking, you would never know.
+
+---
+
+## What I built and why
+
+This project came out of a question I had after my internship at JAEA (Japan's national nuclear research lab), where I built a machine learning pipeline for detecting bubbles inside nuclear reactor tubes. The problem there was similar in structure: I had raw sensor data that needed to become structured information, limited examples to learn from, and consequences for getting it wrong.
+
+The receipt problem is a civilian version of the same challenge. I wanted to build something that:
+
+1. Extracts structured data from messy real-world documents
+2. Knows when it's uncertain and routes those cases to a human
+3. Learns from human corrections over time so the system gets better automatically
+4. Is honest about its limitations in a benchmark
+
+The result is a full pipeline — from image upload to structured data to quality review to continuous improvement — built as a real service, not a demo script.
+
+---
+
+## How it works, step by step
+
+Think of the pipeline as an assembly line with a quality inspector at the end. Here's what happens to every receipt that enters the system.
+
+### Step 1: The receipt arrives
+
+A user uploads a photo or PDF of a receipt through the API. The system immediately responds with a receipt ID and a status of "processing." This is important: the system does not make you wait while it processes. It queues the work and sends you a ticket.
+
+This pattern — accepting work immediately and processing in the background — is called **asynchronous processing**. It's how almost every modern web service works. When you post a photo on Instagram, it doesn't make your phone wait while it resizes and compresses the image for every screen size. It queues that work, confirms your upload, and processes in the background.
+
+Here, the background processing is handled by **Celery** (a task queue) and **Redis** (an in-memory database that acts as the message broker between the API and the workers). Think of Redis as a bulletin board where the API posts jobs, and workers come and pick them up.
+
+### Step 2: Reading the image (OCR)
+
+The worker picks up the task and first tries to extract the raw text from the image. It uses **AWS Textract** as its primary tool — a cloud service from Amazon that is particularly good at documents and tables. If Textract isn't available (for example, in local development without AWS credentials), it falls back to **Tesseract**, a free open-source OCR engine.
+
+Textract does something useful beyond just reading text: it also returns a confidence score for each word. When it reads `CHKN BRST`, it might say it's 96% confident. When it reads a smudged total, it might say 71%. These word-level scores matter later.
+
+### Step 3: Understanding the text (structured extraction)
+
+Raw text goes in. Structured data needs to come out.
+
+This is where a large language model (LLM) comes in. The system sends the raw OCR text to GPT-4o or a Groq-hosted model, along with a very specific instruction: "Return this as a structured receipt with these exact fields. Nothing else."
+
+The "nothing else" part is enforced by a library called **Instructor**, which works with a tool called **Pydantic** to define exactly what shape the response must take. If the AI tries to return something that doesn't fit the schema — say, it puts text where a number should be — Instructor automatically retries with a correction prompt.
+
+```python
+class LineItem(BaseModel):
+    name: str
+    quantity: float
+    unit_price: float
+    total_price: float
+    category: Optional[str]
+    confidence: float  # the model's own assessment (0 to 1)
 ```
 
-### Main building blocks
+Notice the `confidence` field. The model is asked to assess its own certainty for each line item. This self-assessment, combined with the OCR confidence scores, feeds the next step.
 
-- **FastAPI**: ingestion and operational APIs
-- **Celery + Redis**: background orchestration for asynchronous document processing
-- **PostgreSQL + pgvector**: transactional data + semantic matching
-- **OCR layer**: AWS Textract (primary) with Tesseract fallback
-- **Extraction layer**: schema-constrained LLM parsing with backend flexibility
+### Step 4: The confidence decision
 
-## Execution lifecycle of a single receipt
+This is the most important step in the whole pipeline, and the one that separates it from a naive "call the AI" approach.
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant API as FastAPI
-    participant Q as Celery/Redis
-    participant W as Worker
-    participant OCR as OCR Layer
-    participant LLM as Extraction Layer
-    participant DB as PostgreSQL
-    participant Rev as Review Queue
+The system computes an overall confidence score for the extraction. It combines:
+- The average OCR word confidence from Textract
+- The model's self-assessed confidence for each field
+- A set of sanity checks: Does the subtotal plus tax equal the total? Is the date in a reasonable range? Does the merchant name look real?
 
-    User->>API: POST /receipts/upload
-    API->>DB: Save receipt as pending
-    API->>Q: Enqueue processing task
-    Q->>W: Worker consumes task
-    W->>OCR: Extract raw text
-    OCR-->>W: OCR text + confidence
-    W->>LLM: Parse into schema
-    LLM-->>W: Structured receipt
-    W->>DB: Store extraction + confidence
-    alt Medium/Low confidence
-      W->>Rev: Create review items
-    else High confidence
-      W->>DB: Mark completed
-    end
-```
+Based on this score, three things can happen:
 
-From a product perspective, this means users get immediate upload acknowledgment while heavy processing happens in the background and final states are persisted for later retrieval.
+| Confidence level | What happens |
+|---|---|
+| **High** (above 85%) | Auto-complete. The receipt is stored and marked done. |
+| **Medium** (65–85%) | Specific fields are flagged for human review. |
+| **Low** (below 65%) | The entire receipt goes into the review queue. |
 
-## Core concepts and how they are implemented
+This routing is the equivalent of a quality inspector on an assembly line who doesn't check every item — only the ones the machine flagged as uncertain. It scales. A human's time is spent where it matters.
 
-### 1) Asynchronous first architecture
+### Step 5: Matching items to a catalog
 
-Receipt parsing is compute-heavy and variable in duration.  
-Instead of blocking request/response cycles, the API writes a receipt record and dispatches a worker task.
+Once line items are extracted, the system tries to match them to a canonical product catalog. "Canonical" just means the clean, standardized version — `"Whole Milk, 1 Gallon"` instead of `"MILK WHL 128oz"`.
 
-Benefits:
-- stable API responsiveness,
-- horizontal worker scaling,
-- improved fault isolation (worker failure does not crash API runtime).
+Two approaches are used:
 
-### 2) Hybrid OCR for resilience
+**Fuzzy matching** is the fast, first-pass approach. It looks for text similarity — how close is `MILK WHL GAL` to `Whole Milk, 1 Gallon`? If they're similar enough (above a threshold), it's a match.
 
-OCR quality determines everything downstream. The pipeline uses a layered strategy:
+**Semantic matching** is used when fuzzy matching isn't confident enough. It converts the text into a numerical representation (called an **embedding**) that captures meaning, not just spelling. Two phrases that mean the same thing will have similar embeddings even if they share no words. These embeddings are stored in **pgvector**, a PostgreSQL extension that can find the most similar embedding to a query in milliseconds.
 
-- try **Textract** when cloud credentials are configured,
-- fall back to **Tesseract** if Textract is unavailable or fails.
+This is the same technology behind "search for anything and find relevant results even if you didn't use the exact words."
 
-This avoids a single dependency bottleneck and lets the system run in both cloud-enabled and local-only environments.
+### Step 6: Human review and the learning loop
 
-### 3) Structured extraction instead of free text
+Receipts that scored low confidence land in a review queue. A reviewer sees the original image side-by-side with the extracted data and can correct any field. These corrections are stored as ground truth.
 
-Raw OCR text is passed to an extraction layer that must return a strict schema (`Receipt`, `LineItem`), validated by Pydantic.
+Nightly, the system runs an error analysis job. It pulls all corrections from the past week, groups them by type (date format errors, price misattributions, quantity parsing failures), and asks the AI to identify patterns. The output is a suggested prompt fix — a change to the instructions given to the extraction model that would prevent the same class of mistake next time.
 
-Supported modes:
-- `openai` for structured extraction through OpenAI models,
-- `groq` using an OpenAI-compatible endpoint with normalization safeguards,
-- `heuristic` as a local baseline path with zero API cost.
+This is the learning loop. The system does not stay fixed at whatever quality it launched with. Human corrections become training signal, error analysis becomes prompt improvement, and the process repeats.
 
-This multi-mode design is useful for cost control, provider flexibility, and benchmark reproducibility.
+---
 
-### 4) Confidence as a control mechanism
+## The benchmark: honest numbers from a real test
 
-The system computes an overall confidence score using OCR confidence and extraction consistency checks.  
-It then routes records by confidence level:
+The project includes a benchmark runner that tests extraction accuracy on the **CORD dataset** — a publicly available set of about 1,000 labeled receipts from Korean and international retailers, widely used in receipt understanding research. [CORD is available on HuggingFace](https://huggingface.co/datasets/naver-clova-ix/cord-v2).
 
-- **High** confidence: complete automatically
-- **Medium** confidence: targeted review tasks
-- **Low** confidence: full manual review
+I ran a 50-receipt sample using Groq (a fast, low-cost inference provider) under two conditions: a baseline prompt and a tuned prompt refined after one round of error analysis.
 
-This is the most important quality mechanism in the project: confidence is not just metadata; it controls workflow behavior.
+| Metric | Baseline | After tuning |
+|---|---|---|
+| Success rate | 86% | 90% |
+| Total exact match | 30.2% | 44.4% |
+| Line-item price exact | 22.6% | 34.4% |
+| Line-item name fuzzy | 40.9% | 36.7% |
+| Avg latency per receipt | 5.1s | 23.7s |
 
-### 5) Product normalization and semantic matching
+A few things are worth noting honestly:
 
-Line items from receipts are inherently noisy (`MILK 2%`, `MILK2PCT`, `MK 2%`).  
-The matching layer standardizes these using:
+**The improvements are real but partial.** Numeric accuracy (totals, prices) improved substantially after tuning. This is the most important metric for financial use cases — getting a dollar amount wrong has direct consequences.
 
-1. fuzzy matching for fast wins,
-2. embedding similarity via pgvector when fuzzy confidence is insufficient.
+**Item name matching got slightly worse.** This is a known limitation: the CORD dataset contains Korean-language items that fuzzy matching handles poorly in its current configuration. Domain-specific dictionaries would help here.
 
-The result is better downstream analytics and cleaner product-level reporting.
+**Accuracy comes at a latency cost.** The tuned configuration takes nearly five times longer per receipt. This is a genuine production tradeoff — better answers sometimes mean slower answers. In a system with asynchronous processing, latency is more manageable than in a synchronous one, but it still affects throughput.
 
-### 6) Human feedback loop and retraining
+**30%–44% exact match is not a typo.** Exact match is a strict metric: if the extracted price is `$6.79` and the ground truth says `$6.80` (rounding difference), that counts as a miss. Fuzzy match scores, which allow for minor variation, are higher. Real production systems often use fuzzy match thresholds for evaluation.
 
-Corrections submitted in review are stored as first-class data, then analyzed for recurring error types.  
-Scheduled and on-demand retraining jobs use this signal to create new model iterations and track improvements over time.
+These numbers are a starting point, not a ceiling. The benchmark infrastructure exists precisely so improvements can be measured rather than assumed.
 
-In practice, this turns manual review from a cost center into an optimization loop.
+---
 
-## Data model and traceability
+## What this is not
 
-The database is organized so every pipeline stage is auditable:
+It's worth being clear about scope.
 
-- **Receipts**: lifecycle status, OCR provider, confidence, totals, timestamps
-- **Line Items**: parsed item-level details + matching metadata
-- **Review Queue**: pending and resolved corrections with notes
-- **Canonical Products**: normalized catalog entries (with optional embeddings)
-- **Retraining Runs**: trigger source, sample counts, validation metrics
+This is a **research and demonstration project**, not a deployed production service. It is designed to show the architecture, the active learning loop, and the benchmark methodology — not to handle millions of receipts at commercial scale. At that scale, additional concerns arise: distributed worker fleets, multi-region redundancy, stricter SLAs, billing integrations, and much more.
 
-This model makes it easier to answer operational questions such as:
-- Where is quality dropping?
-- Which fields trigger most corrections?
-- Did retraining improve the right metrics?
+It also does not yet handle handwritten receipts, non-Latin scripts beyond what Textract supports, or receipts with embedded images of products rather than text descriptions.
 
-## Operational API surface
+---
 
-The system exposes endpoint groups for each operational concern:
+## Key concepts, if you want to go deeper
 
-- **Ingestion and retrieval**: upload, batch status, receipt detail, OCR text
-- **Review operations**: queue listing, approve/correct/skip actions
-- **Catalog services**: product lookup and matching endpoints
-- **Analytics services**: error patterns, calibration, estimated cost views
-- **Retraining control**: trigger and run history endpoints
-- **System checks**: health and Prometheus metrics
+For those who want to understand the underlying ideas better:
 
-This separation keeps integrations simple for product teams and maintainable for backend teams.
+- **OCR (Optical Character Recognition):** [AWS guide to OCR](https://aws.amazon.com/what-is/ocr/) — a good plain-English explanation
+- **Large Language Models:** [What is a large language model?](https://www.cloudflare.com/learning/ai/what-is-large-language-model/) — Cloudflare's accessible overview
+- **Active Learning:** The idea of letting a model flag which examples it's most uncertain about, then having a human label only those. [A visual explanation from Google](https://cloud.google.com/blog/topics/developers-practitioners/active-learning-machine-learning)
+- **Vector embeddings and semantic search:** [What are embeddings?](https://openai.com/blog/introducing-text-and-code-embeddings) — OpenAI's explanation of how meaning becomes numbers
+- **pgvector:** [pgvector on GitHub](https://github.com/pgvector/pgvector) — how PostgreSQL handles similarity search
+- **Weak supervision:** Using noisy or imperfect labels (like LLM outputs) as training data when clean labels are expensive. [The Snorkel paper](https://arxiv.org/abs/1711.10160) introduced this idea formally
+- **CORD dataset:** [CORD on HuggingFace](https://huggingface.co/datasets/naver-clova-ix/cord-v2) — the receipt benchmark used here
 
-## Benchmarking methodology and findings
+---
 
-The repository includes a benchmark runner for CORD (`benchmarks/run_cord.py`) and report generation tooling.
+## Source
 
-### Extraction backends under test
+The full codebase, benchmark scripts, and README are at:
 
-- `heuristic` (no API dependency)
-- `openai` (structured LLM extraction)
-- `groq` (OpenAI-compatible structured extraction)
+[github.com/theSelfSa/receipt-intelligence-pipeline](https://github.com/theSelfSa/receipt-intelligence-pipeline)
 
-### 50-sample Groq run: baseline vs tuned configuration
-
-```text
-Success rate          86%   -> 90%
-Total exact match     30.2% -> 44.4%
-Line-item price exact 22.6% -> 34.4%
-Line-item name fuzzy  40.9% -> 36.7%
-Avg latency           5.07s -> 23.73s
-```
-
-```text
-Visual trend (higher is better except latency)
-
-Success rate          baseline ██████████████████ 86%
-                      tuned    ███████████████████ 90%
-
-Total exact match     baseline ██████ 30.2%
-                      tuned    █████████ 44.4%
-
-Line-item price       baseline ████ 22.6%
-                      tuned    ███████ 34.4%
-
-Line-item name fuzzy  baseline ████████ 40.9%
-                      tuned    ███████ 36.7%
-```
-
-Interpretation:
-- tuning materially improved numeric extraction reliability,
-- reliability improved slightly overall,
-- latency increased significantly,
-- item-name fuzzy quality still needs targeted optimization.
-
-This is a realistic production tradeoff profile: better accuracy often increases compute latency and cost.
-
-## Engineering tradeoffs and lessons
-
-### Why this architecture works
-
-- Confidence-driven routing prevents low-quality auto-finalization.
-- Asynchronous workers make the system scalable and responsive.
-- Multi-provider extraction reduces vendor lock-in risk.
-- Structured schemas reduce silent data corruption from free-form text.
-
-### Current limitations
-
-- OCR quality still constrains extraction ceiling for heavily degraded documents.
-- Some tuned modes improve accuracy but increase latency.
-- Catalog quality depends on how complete canonical product seed data is.
-
-### Next improvements
-
-- stronger line-item name normalization and domain dictionaries,
-- adaptive model routing based on receipt complexity,
-- richer benchmark slices by document quality category,
-- stricter automated regression checks for extraction metrics.
-
-## References and further reading
-
-### Project repository
-- [Receipt Intelligence Pipeline (GitHub)](https://github.com/theSelfSa/receipt-intelligence-pipeline)
-
-### Important implementation files
-- [Pipeline orchestration](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/app/services/pipeline.py)
-- [OCR service (Textract + Tesseract)](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/app/services/ocr.py)
-- [Structured extraction service](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/app/services/extraction.py)
-- [Benchmark runner](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/benchmarks/run_cord.py)
-- [Celery worker + scheduler config](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/app/worker.py)
-- [API routers](https://github.com/theSelfSa/receipt-intelligence-pipeline/tree/main/app/routers)
-
-### Technology documentation
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [Celery](https://docs.celeryq.dev/en/stable/)
-- [Redis](https://redis.io/docs/)
-- [PostgreSQL](https://www.postgresql.org/docs/)
-- [pgvector](https://github.com/pgvector/pgvector)
-- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract)
-- [AWS Textract](https://docs.aws.amazon.com/textract/)
-- [Pydantic](https://docs.pydantic.dev/)
+Key files worth reading if you want to understand the implementation:
+- [`app/services/pipeline.py`](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/app/services/pipeline.py) — the main processing flow
+- [`app/services/extraction.py`](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/app/services/extraction.py) — how the LLM extraction is structured
+- [`benchmarks/run_cord.py`](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/benchmarks/run_cord.py) — the benchmark runner
