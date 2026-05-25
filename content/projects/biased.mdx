@@ -1,25 +1,26 @@
 ---
 title: "B.I.A.S.E.D."
-subtitle: "Business Intelligence Assistant for Enriched Decision-Making -- open-source AI analyst for small businesses"
-date: "2025-01"
+subtitle: "Business Intelligence Assistant for Enriched Decision-Making , an open-source AI analyst for small businesses"
+date: "2026-05"
 category: "ai-ml"
 tags: ["RAG", "LangGraph", "pgvector", "Ollama", "FastAPI", "Next.js", "MCP", "Open Source", "SMB", "Business Intelligence", "LangChain", "PostgreSQL"]
 github: "https://github.com/theSelfSa/biased"
 demo: ""
 featured: true
 order: 2
+coverImage: "/assets/projects/project-biased.png"
 metrics:
   - "Free and open source under Apache-2.0"
-  - "Runs fully local with Ollama -- no data leaves your machine"
+  - "Runs fully local with Ollama , no data leaves your machine"
   - "Agentic investigation pipeline with citations and confidence traces"
   - "Multi-user workspace with owner, manager, and accountant roles"
 ---
 
 ## The notebook problem
 
-During my undergraduate years I worked with a wholesale jaggery store in Kolhapur, Maharashtra. The owner had years of daily sales records -- dates, item weights, amounts in rupees -- stored in a notebook. Everything was there. Ask him why March underperformed and the notebook had no answer. Ask whether to place a large order before the festival season and it just sat there.
+During my undergraduate years I worked with a wholesale jaggery store in Kolhapur, Maharashtra. The owner had years of daily sales records (dates, item weights, amounts in rupees) stored in a notebook. Everything was there. Ask him why March underperformed and the notebook had no answer. Ask whether to place a large order before the festival season and it just sat there.
 
-We built the first version of B.I.A.S.E.D. for exactly this situation: an Android application backed by an LSTM neural network that could store records, visualize trends, and predict future sales. We tested it on that store's actual data: 61 daily entries from March 2012 to April 2013, split 40 for training and 21 for testing. The model improved with every new entry. Real business, real rupees, real predictions -- not a demo.
+We built the first version of B.I.A.S.E.D. for exactly this situation: an Android application backed by an LSTM neural network that could store records, visualize trends, and predict future sales. We tested it on that store's actual data: 61 daily entries from March 2012 to April 2013, split 40 for training and 21 for testing. The model improved with every new entry. Real business, real rupees, real predictions. Not a demo.
 
 But it could predict. It could not explain. Ask "why did March drop?" and it had nothing to say. That limitation turned out to matter more than anything else.
 
@@ -29,13 +30,13 @@ Four years later, with a completely different set of tools available, I rebuilt 
 
 ## The gap that did not close
 
-According to a joint study by [ASSOCHAM and PwC](https://www.pwc.in/), for every 100 companies in India, more than 95 are micro enterprises. Commercial analytics firm Dun & Bradstreet named this the "Missing Middle" -- the structural absence of small and medium businesses in an economy dominated by micro enterprises and a thin layer of large corporations. The pattern is not unique to India. [The OECD reports](https://www.oecd.org/en/topics/small-and-medium-sized-enterprises-and-entrepreneurship.html) that SMBs represent over 90% of businesses globally while consistently underinvesting in analytics and decision tools.
+According to a joint study by [ASSOCHAM and PwC](https://www.pwc.in/), for every 100 companies in India, more than 95 are micro enterprises. Commercial analytics firm Dun & Bradstreet named this the "Missing Middle": the structural absence of small and medium businesses in an economy dominated by micro enterprises and a thin layer of large corporations. The pattern is not unique to India. [The OECD reports](https://www.oecd.org/en/topics/small-and-medium-sized-enterprises-and-entrepreneurship.html) that SMBs represent over 90% of businesses globally while consistently underinvesting in analytics and decision tools.
 
 The paid tools for business intelligence are good. They are also priced for organizations with resources to match.
 
 ![Paid vs free BI tools: price vs AI capability landscape](./images/biased-tools-landscape.png)
 
-*The business intelligence landscape in 2025. Large enterprises have well-supported options at significant cost. The bottom-right quadrant -- high capability, low cost -- is what B.I.A.S.E.D. is trying to occupy.*
+*The business intelligence landscape in 2025. Large enterprises have well-supported options at significant cost. The bottom-right quadrant, high capability at low cost, is what B.I.A.S.E.D. is trying to occupy.*
 
 | Tool | Cost | Conversational AI | Runs locally | Open source |
 |---|---|---|---|---|
@@ -47,13 +48,13 @@ The paid tools for business intelligence are good. They are also priced for orga
 | Power BI Desktop | Free (basic) | No | No | No |
 | **B.I.A.S.E.D.** | **Free** | **Yes** | **Yes (Ollama)** | **Yes (Apache-2.0)** |
 
-Free tools like Google Looker Studio or Power BI Desktop exist, but they require technical setup and data pipeline knowledge that most small business owners do not have and should not need. The gap is not just price -- it is the combination of price and accessibility.
+Free tools like Google Looker Studio or Power BI Desktop exist, but they require technical setup and data pipeline knowledge that most small business owners do not have and should not need. The gap is not just price; it is the combination of price and accessibility.
 
 ---
 
 ## The first version: LSTM and what it taught us
 
-The original application used [Long Short-Term Memory (LSTM) networks](https://www.bioinf.jku.at/publications/older/2604.pdf) -- a type of recurrent neural network designed specifically for time-series data, proposed by Hochreiter and Schmidhuber in 1997. Unlike standard feed-forward networks, LSTM cells maintain an internal memory state controlled by three gates: an input gate that decides what new information to store, a forget gate that decides what to discard, and an output gate that decides what to pass forward. This gating mechanism lets the network learn patterns across long time spans without the vanishing gradient problem that makes ordinary RNNs impractical on real sequences.
+The original application used [Long Short-Term Memory (LSTM) networks](https://www.bioinf.jku.at/publications/older/2604.pdf), a type of recurrent neural network designed specifically for time-series data, proposed by Hochreiter and Schmidhuber in 1997. Unlike standard feed-forward networks, LSTM cells maintain an internal memory state controlled by three gates: an input gate that decides what new information to store, a forget gate that decides what to discard, and an output gate that decides what to pass forward. This gating mechanism lets the network learn patterns across long time spans without the vanishing gradient problem that makes ordinary RNNs impractical on real sequences.
 
 For a business with daily sales records, this is a natural fit. The model treats each day's sales figure as a time step and learns to predict the next value from the history of previous values.
 
@@ -66,11 +67,11 @@ model.compile(loss='mean_squared_error', optimizer='adam')
 model.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
 ```
 
-On the jaggery store dataset, accuracy improved consistently as more entries were added -- which is exactly the right behavior for a tool meant to grow with a business. The application also had multi-user workspaces, customizable tags per business type, and CSV-based record import. It was deployed with local vendors and used in production.
+On the jaggery store dataset, accuracy improved consistently as more entries were added, which is exactly the right behavior for a tool meant to grow with a business. The application also had multi-user workspaces, customizable tags per business type, and CSV-based record import. It was deployed with local vendors and used in production.
 
-What it could not do: answer a question. LSTM produces a number -- a predicted sales figure for next week. It cannot tell you why last week was low. It cannot reason about your specific business context. It cannot connect a sales dip to a local holiday, a supplier delay, or a price change you made three months ago. It predicts. It does not understand.
+What it could not do: answer a question. LSTM produces a number, a predicted sales figure for next week. It cannot tell you why last week was low. It cannot reason about your specific business context. It cannot connect a sales dip to a local holiday, a supplier delay, or a price change you made three months ago. It predicts. It does not understand.
 
-That distinction -- predicting versus understanding -- is the core problem that the rebuilt version addresses.
+That distinction between predicting and understanding is the core problem that the rebuilt version addresses.
 
 ---
 
@@ -90,7 +91,7 @@ The challenge is that these models are trained on the internet, not on your busi
 
 For a non-technical reader: imagine hiring a consultant who is brilliant but just arrived today. Before answering anything, they go to your filing cabinet, find the relevant records, read them, and then form their answer based on what they found. RAG is that process, automated.
 
-For a technical reader: the retrieval step uses vector embeddings -- mathematical representations of text that capture semantic meaning rather than literal keywords. Similar concepts produce similar vectors. This means a query about "slow months" will retrieve documents about "seasonal downturns" even if those exact words never appear together. The embeddings are stored in [pgvector](https://github.com/pgvector/pgvector), a PostgreSQL extension that adds approximate nearest-neighbor search over vector columns.
+For a technical reader: the retrieval step uses vector embeddings, mathematical representations of text that capture semantic meaning rather than literal keywords. Similar concepts produce similar vectors. This means a query about "slow months" will retrieve documents about "seasonal downturns" even if those exact words never appear together. The embeddings are stored in [pgvector](https://github.com/pgvector/pgvector), a PostgreSQL extension that adds approximate nearest-neighbor search over vector columns.
 
 ```sql
 -- pgvector nearest-neighbor retrieval
@@ -100,7 +101,7 @@ ORDER BY embedding <=> query_vector
 LIMIT 10;
 ```
 
-The `<=>` operator is the cosine distance function added by pgvector. It finds the chunks whose meaning is closest to the query vector -- in milliseconds, even over large collections.
+The `<=>` operator is the cosine distance function added by pgvector. It finds the chunks whose meaning is closest to the query vector, in milliseconds, even over large collections.
 
 ![RAG architecture: from business data to cited answer](./images/biased-rag-architecture.png)
 
@@ -110,35 +111,15 @@ The `<=>` operator is the cosine distance function added by pgvector. It finds t
 
 ## B.I.A.S.E.D. today: architecture and data flow
 
-The current release is v1.0.0-showcase. The repository is a [pnpm monorepo](https://pnpm.io/workspaces) with four main packages:
+The current release is v1.0.0-showcase. The repository is a [pnpm monorepo](https://pnpm.io/workspaces) with four main packages: a Next.js PWA frontend, a FastAPI backend, a shared contracts package, reusable UI primitives, infrastructure configuration, and sanitized demo fixtures.
 
-```
-biased/
-  apps/web/          Next.js PWA frontend
-  apps/api/          FastAPI backend
-  packages/contracts/ Shared Zod types between frontend and API
-  packages/ui/       Reusable UI components
-  infra/             Docker Compose for local deployment
-  data/demo/         Sanitized demo fixtures
-```
+![B.I.A.S.E.D. monorepo structure: six packages across apps, shared packages, and infrastructure](./images/biased-monorepo.png)
 
-[Zod](https://zod.dev/) contracts live in a shared package so the TypeScript frontend and Python backend agree on every request and response shape without duplication. If you change a contract, both sides fail their type checks immediately.
+[Zod](https://zod.dev/): schema validation for shared contracts. These contracts live in the shared package so the TypeScript frontend and Python backend agree on every request and response shape without duplication. Change a contract and both sides fail their type checks immediately.
 
-The high-level data flow is:
+The high-level data flow splits into two parallel tracks that converge at the orchestrator. The first track handles data ingestion: the owner imports business records, the API normalises them, and Postgres stores them with pgvector indexing the semantic embeddings. The second track handles questions: the user asks something in plain English, it hits the investigation API, and reaches the orchestrator. The orchestrator runs the SQL analyst and RAG retriever in sequence, then passes their combined findings to the response writer, which assembles the final cited answer.
 
-```
-Owner imports data -> API normalizes -> Postgres stores
-                                              |
-                                         pgvector indexes
-                                              |
-User asks question -> Investigation API -> Orchestrator
-                                              |
-                              SQL insight tool + RAG retriever
-                                              |
-                              Response writer assembles evidence
-                                              |
-                         Answer with citations, confidence, risks
-```
+![B.I.A.S.E.D. end-to-end data flow: ingestion and investigation tracks converging at the orchestrator](./images/biased-data-flow.png)
 
 ![B.I.A.S.E.D. end-to-end query lifecycle](./images/biased-query-lifecycle.png)
 
@@ -152,19 +133,19 @@ This is the technical core of B.I.A.S.E.D. Source: `apps/api/src/api/services/ag
 
 When a user submits a question to `POST /api/investigations`, the backend runs the following sequence:
 
-**Step 1 -- Guardrails.**
+**Step 1: Guardrails.**
 
 The question passes through `guard_question`, which blocks SQL injection, control-like prompts, and attempts to access data outside the user's workspace. This is not optional: an AI system that executes arbitrary instructions against a business database is a security risk, not a feature.
 
-**Step 2 -- Task classification.**
+**Step 2: Task classification.**
 
 The orchestrator infers the task class: `summarize`, `investigate`, or `recommend`. This determines which tools will be invoked and how the response writer will frame the output.
 
-**Step 3 -- Provider selection.**
+**Step 3: Provider selection.**
 
-The runtime mode is read from the workspace's model profile: `local-open` (Ollama on the same machine), `byo-cloud` (user-provided API key for OpenAI, Anthropic, or Groq), or `hybrid` (task-sensitive routing between local and cloud). Provider metadata -- model name, mode, estimated cost per query -- is returned in every response so the user can see exactly what ran.
+The runtime mode is read from the workspace's model profile: `local-open` (Ollama on the same machine), `byo-cloud` (user-provided API key for OpenAI, Anthropic, or Groq), or `hybrid` (task-sensitive routing between local and cloud). Provider metadata (model name, mode, estimated cost per query) is returned in every response so the user can see exactly what ran.
 
-**Step 4 -- Orchestration route.**
+**Step 4: Orchestration route.**
 
 The orchestrator executes a four-step route:
 
@@ -174,15 +155,15 @@ router -> sql_analyst -> rag_retriever -> response_writer
 
 The implementation uses [LangGraph](https://langchain-ai.github.io/langgraph/) when available, with a linear fallback for environments where it cannot be loaded. LangGraph models the orchestration as a directed graph of nodes: each node is a tool call, and the graph controls the sequence, the data passed between steps, and error handling at each stage.
 
-The SQL analyst runs safe, parameterized queries against the operational tables (sales, purchases, expenses) to compute metrics: revenue by period, top products, expense trends. It cannot execute arbitrary SQL -- only a predefined set of read-only analytical queries.
+The SQL analyst runs safe, parameterized queries against the operational tables (sales, purchases, expenses) to compute metrics: revenue by period, top products, expense trends. It runs only a predefined set of read-only analytical queries.
 
 The RAG retriever converts the question to an embedding, runs `<=>` nearest-neighbor search over `document_chunks`, and returns the top matching chunks with their source labels.
 
-**Step 5 -- Response assembly.**
+**Step 5: Response assembly.**
 
-The response writer receives the SQL findings and RAG citations and calls the language model to synthesize a final answer. The model does not see the raw database -- it sees structured context prepared by the preceding tools.
+The response writer receives the SQL findings and RAG citations and calls the language model to synthesize a final answer. The model does not see the raw database; it receives structured context prepared by the preceding tools.
 
-**Step 6 -- Structured output.**
+**Step 6: Structured output.**
 
 The investigation response has a fixed schema:
 
@@ -215,15 +196,15 @@ A note on the current showcase: the embedding strategy in this release uses a de
 
 Before the AI can investigate anything, the data has to get in. B.I.A.S.E.D. uses a two-phase import pipeline to handle real-world messiness without silently corrupting records. Source: `apps/api/src/api/services/demo_data.py`.
 
-**Phase 1 -- Preview.**
+**Phase 1: Preview.**
 
 `POST /api/import-jobs` accepts CSV or Excel files via [Polars](https://pola.rs/) (for CSV) and [OpenPyXL](https://openpyxl.readthedocs.io/) (for Excel). The API infers column mappings, flags missing required fields, and returns a preview with warnings. The user sees exactly what will be imported before anything is committed.
 
 Supported import types: `sales`, `purchases`, `products`, `expenses`, `recurring_obligations`.
 
-**Phase 2 -- Confirm.**
+**Phase 2: Confirm.**
 
-`POST /api/import-jobs/{id}/confirm` applies the normalized rows into the target domain tables. If anything fails at this stage, no partial data is written -- the confirmation is transactional.
+`POST /api/import-jobs/{id}/confirm` applies the normalized rows into the target domain tables. If anything fails at this stage, no partial data is written. The confirmation is transactional.
 
 After confirmation, imported documents are chunked (fixed 280-character segments) and their embeddings are written to `document_chunks` with a `vector(24)` column. This is what the RAG retriever searches.
 
@@ -237,12 +218,12 @@ Not all business questions are open-ended. B.I.A.S.E.D. also includes determinis
 
 **Scenario planning** (`POST /api/scenarios/run`) models four implemented scenarios:
 
-- `supplier_price_increase` -- impact on purchase costs and margins
-- `underperforming_product_line` -- revenue delta from removing or repricing a product
-- `delayed_reorder` -- cash flow impact of a stockout event
-- `rent_electricity_increase` -- operating cost impact on net position
+- `supplier_price_increase`: impact on purchase costs and margins
+- `underperforming_product_line`: revenue delta from removing or repricing a product
+- `delayed_reorder`: cash flow impact of a stockout event
+- `rent_electricity_increase`: operating cost impact on net position
 
-Each scenario returns a structured diff: baseline values, projected values, and impact deltas, with recommendations. The calculations are deterministic and auditable -- no black-box AI involved.
+Each scenario returns a structured diff: baseline values, projected values, and impact deltas, with recommendations. The calculations are deterministic and auditable. No black-box AI involved.
 
 **Scheduler** (`POST /api/scheduler/run`) scans recurring obligations and transaction patterns to produce a brief with upcoming obligations, detected anomalies, and reminders. This runs on a schedule to keep the action center populated.
 
@@ -270,7 +251,7 @@ run_scheduler        Trigger the scheduler run
 read_import_ledger   Inspect the import job history
 ```
 
-This means any MCP-compatible client -- including other AI agents, automation tools, or custom scripts -- can invoke B.I.A.S.E.D.'s workflows programmatically, not just through the web UI. A user who wants to run a weekly investigation from a cron job or trigger a forecast from another application can do so through the MCP interface without touching the web frontend.
+This means any MCP-compatible client (other AI agents, automation tools, or custom scripts) can invoke B.I.A.S.E.D.'s workflows programmatically, not just through the web UI. A user who wants to run a weekly investigation from a cron job or trigger a forecast from another application can do so through the MCP interface without touching the web frontend.
 
 ---
 
@@ -294,9 +275,9 @@ Schema bootstrap lives in `apps/api/src/api/services/demo_data.py`. The frontend
 
 Access control uses three roles enforced through RBAC helpers in `apps/web/lib/rbac.ts`:
 
-- `owner` -- full access: settings, imports, AI features, all data
-- `manager` -- operational access: transactions, imports, AI features
-- `accountant` -- read and expense access: view data, add expenses
+- `owner`: full access, settings, imports, AI features, all data
+- `manager`: operational access, transactions, imports, AI features
+- `accountant`: read and expense access, view data, add expenses
 
 [Better Auth](https://www.better-auth.com/) handles session management, email verification, and the auth plumbing in `apps/web/lib/auth.ts`. It is provider-agnostic and does not require a third-party auth service.
 
@@ -339,9 +320,9 @@ In this path, the `byo-cloud` mode routes model calls to a cloud provider using 
 
 The current release is labeled v1.0.0-showcase for a reason.
 
-The embedding strategy uses deterministic hashed vectors for reproducibility in the demo environment. Real semantic quality requires a proper embedding model -- Ollama ships several (nomic-embed-text, mxbai-embed-large) and OpenAI's text-embedding-3-small is cost-effective for cloud deployments. The architecture supports swapping this in; the showcase build does not do it automatically.
+The embedding strategy uses deterministic hashed vectors for reproducibility in the demo environment. Real semantic quality requires a proper embedding model. Ollama ships several options (nomic-embed-text, mxbai-embed-large) and OpenAI's text-embedding-3-small is cost-effective for cloud deployments. The architecture supports swapping this in; the showcase build does not do it automatically.
 
-Enterprise concerns -- SLAs, dedicated support, hardened multi-region infrastructure, compliance certifications -- are out of scope for an open-source single-developer showcase release. Organizations with those requirements need a managed vendor.
+Enterprise concerns (SLAs, dedicated support, hardened multi-region infrastructure, compliance certifications) are out of scope for an open-source single-developer showcase release. Organizations with those requirements need a managed vendor.
 
 The "local-first + open-source" design is a deliberate trade-off: maximum privacy and zero ongoing cost, with the trade-off being that the user manages their own infrastructure and accepts the limitations of whatever local hardware they have.
 
@@ -353,28 +334,28 @@ The jaggery store owner with the notebook should be able to ask his records a qu
 
 That is still the problem. The technology to solve it now exists and is open source. B.I.A.S.E.D. is one attempt to package it in a way that makes it usable for the businesses that need it most.
 
-[github.com/theSelfSa/biased](https://github.com/theSelfSa/biased) -- Apache-2.0, contributions welcome.
+[github.com/theSelfSa/biased](https://github.com/theSelfSa/biased), Apache-2.0, contributions welcome.
 
 ---
 
 ## References and further reading
 
 **Core concepts**
-- [Retrieval-Augmented Generation (Lewis et al., 2020)](https://arxiv.org/abs/2005.11401) -- the paper that introduced RAG
-- [Long Short-Term Memory (Hochreiter & Schmidhuber, 1997)](https://www.bioinf.jku.at/publications/older/2604.pdf) -- the original LSTM paper
-- [LangGraph documentation](https://langchain-ai.github.io/langgraph/) -- multi-agent orchestration framework
-- [pgvector on GitHub](https://github.com/pgvector/pgvector) -- vector similarity search for PostgreSQL
-- [Model Context Protocol](https://modelcontextprotocol.io/) -- the MCP standard implemented in B.I.A.S.E.D.
-- [Ollama](https://ollama.com/) -- local model runtime
+- [Retrieval-Augmented Generation (Lewis et al., 2020)](https://arxiv.org/abs/2005.11401): the paper that introduced RAG
+- [Long Short-Term Memory (Hochreiter & Schmidhuber, 1997)](https://www.bioinf.jku.at/publications/older/2604.pdf): the original LSTM paper
+- [LangGraph documentation](https://langchain-ai.github.io/langgraph/): multi-agent orchestration framework
+- [pgvector on GitHub](https://github.com/pgvector/pgvector): vector similarity search for PostgreSQL
+- [Model Context Protocol](https://modelcontextprotocol.io/): the MCP standard implemented in B.I.A.S.E.D.
+- [Ollama](https://ollama.com/): local model runtime
 
 **Tools used**
-- [FastAPI](https://fastapi.tiangolo.com/) -- async Python API framework
-- [Next.js](https://nextjs.org/) -- React framework for the PWA frontend
-- [Polars](https://pola.rs/) -- fast DataFrame library for CSV import
-- [Better Auth](https://www.better-auth.com/) -- auth framework
-- [Drizzle ORM](https://orm.drizzle.team/) -- TypeScript ORM for schema sync
-- [Zod](https://zod.dev/) -- schema validation for shared contracts
-- [pnpm workspaces](https://pnpm.io/workspaces) -- monorepo tooling
+- [FastAPI](https://fastapi.tiangolo.com/): async Python API framework
+- [Next.js](https://nextjs.org/): React framework for the PWA frontend
+- [Polars](https://pola.rs/): fast DataFrame library for CSV import
+- [Better Auth](https://www.better-auth.com/): auth framework
+- [Drizzle ORM](https://orm.drizzle.team/): TypeScript ORM for schema sync
+- [Zod](https://zod.dev/): schema validation for shared contracts
+- [pnpm workspaces](https://pnpm.io/workspaces): monorepo tooling
 
 **Context**
 - [OECD: SMEs and Entrepreneurship](https://www.oecd.org/en/topics/small-and-medium-sized-enterprises-and-entrepreneurship.html)
