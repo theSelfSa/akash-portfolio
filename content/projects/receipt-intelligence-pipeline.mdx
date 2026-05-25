@@ -15,27 +15,27 @@ metrics:
   - "Human-in-the-loop correction + retraining loop"
 ---
 
-## What this project does (in plain English)
+## Introduction
 
-Most receipt tools fail when the image is blurry, the layout is unusual, or line items are messy.  
-This project is built to handle that reality.
+Automating receipt processing looks simple until it meets real-world data: low-light photos, skewed scans, inconsistent layouts, abbreviations, missing fields, and vendor-specific formatting.  
+The Receipt Intelligence Pipeline was built to solve that exact gap between demo-friendly AI and production-grade document processing.
 
-You upload a receipt image (or PDF), and the system:
+At a high level, the platform ingests a receipt image or PDF, extracts raw text, converts that text into structured fields, evaluates confidence, and routes uncertain outputs for human correction. Over time, those corrections become learning signal that improves the system.
 
-1. reads text from the document using OCR,
-2. converts it into structured fields (merchant, date, total, items),
-3. scores how trustworthy the extraction is,
-4. sends uncertain results to human review,
-5. learns from corrections over time.
+This design intentionally prioritizes reliability, auditability, and continuous improvement over one-shot automation claims.
 
-So instead of pretending AI is always correct, it combines automation **and** quality control.
+## Problem statement and design goals
 
-## Why this matters
+This project focuses on four practical goals:
 
-For business users: this reduces manual data entry and speeds up expense/accounting workflows.  
-For engineering teams: this shows a production pattern for AI systems where reliability matters more than flashy demos.
+1. **Extract structured receipt data from noisy documents** with predictable schemas.
+2. **Scale processing asynchronously** so uploads remain responsive under load.
+3. **Protect data quality with confidence-aware review**, not blind auto-acceptance.
+4. **Create a feedback loop** where corrections drive measurable model improvement.
 
-## End-to-end architecture
+These goals shape every architectural decision in the system.
+
+## System architecture
 
 ```mermaid
 flowchart LR
@@ -60,7 +60,15 @@ Upload -> OCR -> Structured Parse -> Confidence -> Match -> Store
                                           +-> Low confidence    -> Full review
 ```
 
-## How one receipt moves through the system
+### Main building blocks
+
+- **FastAPI**: ingestion and operational APIs
+- **Celery + Redis**: background orchestration for asynchronous document processing
+- **PostgreSQL + pgvector**: transactional data + semantic matching
+- **OCR layer**: AWS Textract (primary) with Tesseract fallback
+- **Extraction layer**: schema-constrained LLM parsing with backend flexibility
+
+## Execution lifecycle of a single receipt
 
 ```mermaid
 sequenceDiagram
@@ -89,93 +97,107 @@ sequenceDiagram
     end
 ```
 
-## Behind the scenes: implementation breakdown
+From a product perspective, this means users get immediate upload acknowledgment while heavy processing happens in the background and final states are persisted for later retrieval.
 
-### 1) API and asynchronous processing
+## Core concepts and how they are implemented
 
-The API accepts uploads quickly and delegates heavy work to background workers.  
-This keeps user-facing response times fast while OCR/LLM tasks run asynchronously.
+### 1) Asynchronous first architecture
 
-- API layer: FastAPI routes for upload, retrieval, review, analytics, and retraining.
-- Queue layer: Celery workers + Redis broker.
-- State layer: PostgreSQL stores receipt state, line items, review items, and retraining runs.
+Receipt parsing is compute-heavy and variable in duration.  
+Instead of blocking request/response cycles, the API writes a receipt record and dispatches a worker task.
 
-### 2) OCR strategy: cloud-first, local fallback
+Benefits:
+- stable API responsiveness,
+- horizontal worker scaling,
+- improved fault isolation (worker failure does not crash API runtime).
 
-The OCR layer tries AWS Textract first, then falls back to Tesseract when needed.  
-This balances accuracy with operational flexibility.
+### 2) Hybrid OCR for resilience
 
-- If cloud credentials are available, Textract can improve extraction quality for complex docs.
-- If cloud OCR fails (or is unavailable), local Tesseract still keeps the pipeline running.
-- The service computes word-level confidence and an aggregate OCR confidence score.
+OCR quality determines everything downstream. The pipeline uses a layered strategy:
 
-### 3) Structured extraction (multiple modes)
+- try **Textract** when cloud credentials are configured,
+- fall back to **Tesseract** if Textract is unavailable or fails.
 
-The extraction output is validated against strict Pydantic schemas (`Receipt`, `LineItem`) to avoid free-form hallucinated text.
+This avoids a single dependency bottleneck and lets the system run in both cloud-enabled and local-only environments.
 
-Supported extraction backends:
+### 3) Structured extraction instead of free text
 
-- **OpenAI mode** (structured extraction),
-- **Groq mode** (OpenAI-compatible interface + normalization wrapper),
-- **Heuristic mode** (fully local/no API mode for zero-cost benchmarking).
+Raw OCR text is passed to an extraction layer that must return a strict schema (`Receipt`, `LineItem`), validated by Pydantic.
 
-This is useful when you want either:
-- strongest quality (paid API),
-- lower cost experimentation,
-- or completely offline sanity checks.
+Supported modes:
+- `openai` for structured extraction through OpenAI models,
+- `groq` using an OpenAI-compatible endpoint with normalization safeguards,
+- `heuristic` as a local baseline path with zero API cost.
 
-### 4) Confidence routing and human review
+This multi-mode design is useful for cost control, provider flexibility, and benchmark reproducibility.
 
-Every receipt receives an overall confidence score and level:
+### 4) Confidence as a control mechanism
 
-- **High** → auto-complete
-- **Medium** → targeted review on uncertain fields
-- **Low** → full review required
+The system computes an overall confidence score using OCR confidence and extraction consistency checks.  
+It then routes records by confidence level:
 
-This design avoids a common AI mistake: blindly trusting uncertain predictions.
+- **High** confidence: complete automatically
+- **Medium** confidence: targeted review tasks
+- **Low** confidence: full manual review
 
-### 5) Catalog normalization
+This is the most important quality mechanism in the project: confidence is not just metadata; it controls workflow behavior.
 
-Line items are matched against a canonical product catalog:
+### 5) Product normalization and semantic matching
 
-1. fuzzy match first (fast + cheap),
-2. embedding similarity (pgvector) as fallback when needed.
+Line items from receipts are inherently noisy (`MILK 2%`, `MILK2PCT`, `MK 2%`).  
+The matching layer standardizes these using:
 
-This helps normalize noisy item names into cleaner, consistent product records.
+1. fuzzy matching for fast wins,
+2. embedding similarity via pgvector when fuzzy confidence is insufficient.
 
-### 6) Learning loop (error analysis + retraining)
+The result is better downstream analytics and cleaner product-level reporting.
 
-Human corrections are not just fixes; they become training signal:
+### 6) Human feedback loop and retraining
 
-- corrected fields are captured in the review pipeline,
-- error patterns are analyzed (scheduled + on-demand),
-- retraining runs can be triggered and tracked with run metadata.
+Corrections submitted in review are stored as first-class data, then analyzed for recurring error types.  
+Scheduled and on-demand retraining jobs use this signal to create new model iterations and track improvements over time.
 
-In short: the system is designed to improve with usage.
+In practice, this turns manual review from a cost center into an optimization loop.
 
-## Data model in simple terms
+## Data model and traceability
 
-Think of it as five core record types:
+The database is organized so every pipeline stage is auditable:
 
-- **Receipts**: one row per uploaded document
-- **Line Items**: child rows for extracted products/prices
-- **Review Queue**: unresolved low-confidence or corrected fields
-- **Canonical Products**: normalized product catalog for matching
-- **Retraining Runs**: history of training/improvement attempts
+- **Receipts**: lifecycle status, OCR provider, confidence, totals, timestamps
+- **Line Items**: parsed item-level details + matching metadata
+- **Review Queue**: pending and resolved corrections with notes
+- **Canonical Products**: normalized catalog entries (with optional embeddings)
+- **Retraining Runs**: trigger source, sample counts, validation metrics
 
-This structure makes auditing and debugging much easier than storing everything as one big JSON blob.
+This model makes it easier to answer operational questions such as:
+- Where is quality dropping?
+- Which fields trigger most corrections?
+- Did retraining improve the right metrics?
 
-## Benchmarking and measured outcomes
+## Operational API surface
 
-The project includes a CORD benchmark runner with report generation scripts.
+The system exposes endpoint groups for each operational concern:
 
-### Modes used in benchmarking
+- **Ingestion and retrieval**: upload, batch status, receipt detail, OCR text
+- **Review operations**: queue listing, approve/correct/skip actions
+- **Catalog services**: product lookup and matching endpoints
+- **Analytics services**: error patterns, calibration, estimated cost views
+- **Retraining control**: trigger and run history endpoints
+- **System checks**: health and Prometheus metrics
 
-- `heuristic` (local, no API cost)
-- `openai` (paid API extraction)
-- `groq` (paid/free-tier-compatible OpenAI-style extraction)
+This separation keeps integrations simple for product teams and maintainable for backend teams.
 
-### Sample 50-receipt Groq comparison (baseline → tuned)
+## Benchmarking methodology and findings
+
+The repository includes a benchmark runner for CORD (`benchmarks/run_cord.py`) and report generation tooling.
+
+### Extraction backends under test
+
+- `heuristic` (no API dependency)
+- `openai` (structured LLM extraction)
+- `groq` (OpenAI-compatible structured extraction)
+
+### 50-sample Groq run: baseline vs tuned configuration
 
 ```text
 Success rate          86%   -> 90%
@@ -202,44 +224,49 @@ Line-item name fuzzy  baseline ████████ 40.9%
 ```
 
 Interpretation:
-- tuning improved numeric extraction reliability,
-- but increased latency,
-- and item-name fuzzy matching still needs improvement.
+- tuning materially improved numeric extraction reliability,
+- reliability improved slightly overall,
+- latency increased significantly,
+- item-name fuzzy quality still needs targeted optimization.
 
-This is realistic engineering tradeoff data, not cherry-picked perfect numbers.
+This is a realistic production tradeoff profile: better accuracy often increases compute latency and cost.
 
-## Practical tradeoffs and design choices
+## Engineering tradeoffs and lessons
 
-### Why confidence + review instead of “full automation”?
-Because receipts are noisy in the real world. Controlled human review gives better business trust than false confidence.
+### Why this architecture works
 
-### Why pgvector instead of adding a separate vector database?
-For this scope, pgvector inside PostgreSQL keeps architecture simpler and operationally cheaper.
+- Confidence-driven routing prevents low-quality auto-finalization.
+- Asynchronous workers make the system scalable and responsive.
+- Multi-provider extraction reduces vendor lock-in risk.
+- Structured schemas reduce silent data corruption from free-form text.
 
-### Why keep a heuristic mode?
-It gives a no-cost baseline and a fallback testing path when API keys, quotas, or budgets are limited.
+### Current limitations
 
-## Who can use this system
+- OCR quality still constrains extraction ceiling for heavily degraded documents.
+- Some tuned modes improve accuracy but increase latency.
+- Catalog quality depends on how complete canonical product seed data is.
 
-- Teams building expense automation workflows
-- Founders validating receipt intelligence MVPs
-- Engineers learning how to productionize OCR + LLM pipelines
-- Anyone who wants a reference architecture for “AI + human review” systems
+### Next improvements
 
-## References and deep links
+- stronger line-item name normalization and domain dictionaries,
+- adaptive model routing based on receipt complexity,
+- richer benchmark slices by document quality category,
+- stricter automated regression checks for extraction metrics.
+
+## References and further reading
 
 ### Project repository
 - [Receipt Intelligence Pipeline (GitHub)](https://github.com/theSelfSa/receipt-intelligence-pipeline)
 
-### Key implementation files
+### Important implementation files
 - [Pipeline orchestration](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/app/services/pipeline.py)
 - [OCR service (Textract + Tesseract)](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/app/services/ocr.py)
 - [Structured extraction service](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/app/services/extraction.py)
 - [Benchmark runner](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/benchmarks/run_cord.py)
-- [Celery worker + schedules](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/app/worker.py)
+- [Celery worker + scheduler config](https://github.com/theSelfSa/receipt-intelligence-pipeline/blob/main/app/worker.py)
 - [API routers](https://github.com/theSelfSa/receipt-intelligence-pipeline/tree/main/app/routers)
 
-### External technologies
+### Technology documentation
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [Celery](https://docs.celeryq.dev/en/stable/)
 - [Redis](https://redis.io/docs/)
