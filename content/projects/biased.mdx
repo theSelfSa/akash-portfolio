@@ -34,7 +34,7 @@ According to a joint study by [ASSOCHAM and PwC](https://www.pwc.in/), for every
 
 The paid tools for business intelligence are good. They are also priced for organizations with resources to match.
 
-![Paid vs free BI tools: price vs AI capability landscape](./images/biased-tools-landscape.png)
+![Paid vs free BI tools: price vs AI capability landscape](/assets/projects/biased-tools-landscape.png)
 
 *The business intelligence landscape in 2025. Large enterprises have well-supported options at significant cost. The bottom-right quadrant, high capability at low cost, is what B.I.A.S.E.D. is trying to occupy.*
 
@@ -103,7 +103,7 @@ LIMIT 10;
 
 The `<=>` operator is the cosine distance function added by pgvector. It finds the chunks whose meaning is closest to the query vector, in milliseconds, even over large collections.
 
-![RAG architecture: from business data to cited answer](./images/biased-rag-architecture.png)
+![RAG architecture: from business data to cited answer](/assets/projects/biased-rag-architecture.png)
 
 *The RAG pipeline. Your business data is chunked, embedded, and stored. At query time, the question is embedded and matched against stored chunks. The retrieved evidence feeds the language model, which produces an answer with citations.*
 
@@ -113,15 +113,15 @@ The `<=>` operator is the cosine distance function added by pgvector. It finds t
 
 The current release is v1.0.0-showcase. The repository is a [pnpm monorepo](https://pnpm.io/workspaces) with four main packages: a Next.js PWA frontend, a FastAPI backend, a shared contracts package, reusable UI primitives, infrastructure configuration, and sanitized demo fixtures.
 
-![B.I.A.S.E.D. monorepo structure: six packages across apps, shared packages, and infrastructure](./images/biased-monorepo.png)
+![B.I.A.S.E.D. monorepo structure: six packages across apps, shared packages, and infrastructure](/assets/projects/biased-monorepo.png)
 
 [Zod](https://zod.dev/): schema validation for shared contracts. These contracts live in the shared package so the TypeScript frontend and Python backend agree on every request and response shape without duplication. Change a contract and both sides fail their type checks immediately.
 
 The high-level data flow splits into two parallel tracks that converge at the orchestrator. The first track handles data ingestion: the owner imports business records, the API normalises them, and Postgres stores them with pgvector indexing the semantic embeddings. The second track handles questions: the user asks something in plain English, it hits the investigation API, and reaches the orchestrator. The orchestrator runs the SQL analyst and RAG retriever in sequence, then passes their combined findings to the response writer, which assembles the final cited answer.
 
-![B.I.A.S.E.D. end-to-end data flow: ingestion and investigation tracks converging at the orchestrator](./images/biased-data-flow.png)
+![B.I.A.S.E.D. end-to-end data flow: ingestion and investigation tracks converging at the orchestrator](/assets/projects/biased-data-flow.png)
 
-![B.I.A.S.E.D. end-to-end query lifecycle](./images/biased-query-lifecycle.png)
+![B.I.A.S.E.D. end-to-end query lifecycle](/assets/projects/biased-query-lifecycle.png)
 
 *From business data import to a cited, evidence-backed answer. The orchestrator routes through SQL analysis and RAG retrieval before the response writer assembles the final output.*
 
