@@ -1,132 +1,41 @@
 ---
 title: "B.I.A.S.E.D."
-subtitle: "Business Intelligence Assistant for Enriched Decision-Making: why I built it twice"
+subtitle: "Business Intelligence Assistant for Enriched Decision-Making -- open-source AI analyst for small businesses"
 date: "2025-01"
 category: "ai-ml"
-tags: ["RAG", "LangGraph", "pgvector", "Ollama", "FastAPI", "Next.js", "MCP", "Open Source", "SMB", "Business Intelligence"]
-github: "https://github.com/TheSelfSa/biased"
+tags: ["RAG", "LangGraph", "pgvector", "Ollama", "FastAPI", "Next.js", "MCP", "Open Source", "SMB", "Business Intelligence", "LangChain", "PostgreSQL"]
+github: "https://github.com/theSelfSa/biased"
 demo: ""
 featured: true
-order: 3
-coverImage: "/assets/projects/project-biased.png"
+order: 2
 metrics:
   - "Free and open source under Apache-2.0"
-  - "Runs fully local with Ollama or connects to cloud LLMs"
-  - "Multi-user workspace with role-based access control"
-  - "Agentic RAG pipeline with citations and confidence traces"
+  - "Runs fully local with Ollama -- no data leaves your machine"
+  - "Agentic investigation pipeline with citations and confidence traces"
+  - "Multi-user workspace with owner, manager, and accountant roles"
 ---
 
-## The man with the notebook
+## The notebook problem
 
-There is a wholesale jaggery store in Sangli, Maharashtra. The owner has been running it for over a decade. He knows his regulars by name. He knows which months are slow and which are busy. He has a sense -- built from years of experience -- of when to stock up and when to hold back.
+During my undergraduate years I worked with a wholesale jaggery store in Kolhapur, Maharashtra. The owner had years of daily sales records -- dates, item weights, amounts in rupees -- stored in a notebook. Everything was there. Ask him why March underperformed and the notebook had no answer. Ask whether to place a large order before the festival season and it just sat there.
 
-What he does not have is data he can actually use.
+We built the first version of B.I.A.S.E.D. for exactly this situation: an Android application backed by an LSTM neural network that could store records, visualize trends, and predict future sales. We tested it on that store's actual data: 61 daily entries from March 2012 to April 2013, split 40 for training and 21 for testing. The model improved with every new entry. Real business, real rupees, real predictions -- not a demo.
 
-His records live in a notebook. Columns of dates, item weights, amounts in rupees. Every day, another row. Over years, thousands of rows. The information is all there. But ask him "why did March 2013 underperform?", and the notebook has no answer. Ask him "based on the last two years, should I place a large order before the festival season?" and the notebook just sits there.
+But it could predict. It could not explain. Ask "why did March drop?" and it had nothing to say. That limitation turned out to matter more than anything else.
 
-This is not a story about one store. According to data from Dun & Bradstreet, for every 100 companies in India, more than 95 are micro enterprises. Four are small to medium businesses. Less than one is a large company. The commercial analytics firm called this the "Missing Middle" -- a structural gap where the vast majority of businesses exist without access to the analytical tools that large enterprises take for granted.
-
-That jaggery store owner was the reason I started building B.I.A.S.E.D. during my undergraduate years. It is also the reason I rebuilt it, from scratch, four years later.
-
----
-
-## The tools gap is wider than the revenue gap
-
-When a company like Walmart or Tata wants to understand its business data, it has options. Salesforce Einstein starts at roughly $50 per user per month and integrates AI-driven forecasting directly into its CRM. Microsoft Copilot for Business costs around $30 per user per month and brings conversational AI into the Microsoft 365 ecosystem. IBM Watson requires enterprise pricing -- which is a polite way of saying "call us, and it will be expensive." Oracle Analytics Cloud, SAP Analytics Cloud, Tableau: the list goes on. Each of these is powerful. Each requires a budget, an implementation team, and ongoing subscription costs that simply do not exist in the economics of a small business.
-
-The free alternatives do exist, but they are not really free in the way that matters for a non-technical business owner. Google Looker Studio is free but requires knowing how to connect data sources and build dashboards. Power BI Desktop is free to download but meaningful use requires Azure integration and technical knowledge. Open-source tools like Metabase or Apache Superset are genuinely powerful but assume someone on your team can install, configure, and maintain them.
-
-The result is a predictable split. Large businesses get AI-driven forecasting, anomaly detection, and natural language queries over their data. Small businesses get Excel, if they are lucky, and intuition otherwise.
-
-This is not a new observation. A 2017 joint study by ASSOCHAM (the Associated Chambers of Commerce and Industry of India) and PwC noted that smartphone penetration was creating a unique opportunity to reach small businesses that had never been reachable by traditional software. At the time, India had 468 million smartphone users. By 2022, that number was expected to cross 850 million. The hardware was there. The question was whether the software would follow.
-
-For the most part, it did not.
+Four years later, with a completely different set of tools available, I rebuilt it from scratch.
 
 ---
 
-## The first attempt (2017 to 2021)
+## The gap that did not close
 
-During my undergraduate years at Walchand College of Engineering, I worked on the first version of what would become B.I.A.S.E.D. The idea was simple: build a smartphone application that any small business owner could use to store records, visualize trends, and get predictions about the future.
+According to a joint study by [ASSOCHAM and PwC](https://www.pwc.in/), for every 100 companies in India, more than 95 are micro enterprises. Commercial analytics firm Dun & Bradstreet named this the "Missing Middle" -- the structural absence of small and medium businesses in an economy dominated by micro enterprises and a thin layer of large corporations. The pattern is not unique to India. [The OECD reports](https://www.oecd.org/en/topics/small-and-medium-sized-enterprises-and-entrepreneurship.html) that SMBs represent over 90% of businesses globally while consistently underinvesting in analytics and decision tools.
 
-The technology we chose for prediction was LSTM, which stands for Long Short-Term Memory. It is a type of neural network particularly suited to time-series data -- data where the order of events matters, like daily sales figures. Traditional prediction methods like moving averages or exponential smoothing work reasonably well on stable, regular data. LSTM was a step up: it could learn longer patterns, handle irregular spikes, and improve as more data was fed into it.
+The paid tools for business intelligence are good. They are also priced for organizations with resources to match.
 
-We tested it on the jaggery store I mentioned. Real data: daily sales entries from March 2012 to April 2013. Sixty-one entries divided into forty for training and twenty-one for testing. The model started with modest accuracy. As it received more data, accuracy improved. The pattern held: the system got better the more it was used, which is exactly the right behavior for a tool meant to grow with a business.
+![Paid vs free BI tools: price vs AI capability landscape](./images/biased-tools-landscape.png)
 
-The application had other features too. Multiple users could share a single workspace, managed through email-based login and verification. Administrators could add team members. Tags could be customized to any business type -- a grocery store would set up different categories than a beauty parlour or a jaggery wholesaler. Records could be viewed as graphs and pie charts. Predictions appeared as a forecast line.
-
-We deployed it with a few local vendors. It ran. Real businesses used it. That part still matters to me: it was not a demo. It was not a proof of concept sitting in a GitHub repository. It ran on actual hardware, with actual data, for actual businesses.
-
-But it had real limits. It was Android-only. It required server infrastructure that the business owner could not manage themselves. And most importantly, it could only do what we had explicitly programmed it to do. It could predict future sales based on past trends. It could not explain why sales had dropped. It could not answer a question it had not been designed to answer. It was a very good calculator for a specific set of problems, but it was not intelligent in any meaningful sense.
-
----
-
-## What changed between 2021 and 2025
-
-The honest answer is: everything.
-
-In November 2022, OpenAI released ChatGPT. By early 2023, it had over 100 million users -- the fastest consumer software adoption in history at that point. What ChatGPT demonstrated was not just that AI could generate text. It demonstrated that AI could understand language well enough to be genuinely useful in conversation. You could ask it a question in plain English and receive a thoughtful, structured answer. You did not need to know what model to use, what parameters to set, or how to write a query.
-
-The models kept improving. Claude, Gemini, Llama, Mistral -- a generation of language models arrived that were not only capable but increasingly accessible. Some ran in the cloud. Some, like Llama and Mistral through a tool called Ollama, could run entirely on a personal laptop with no internet connection required.
-
-The key technical development that made B.I.A.S.E.D. possible in its current form is something called Retrieval-Augmented Generation, or RAG. The name is technical but the idea is not.
-
-A large language model trained on the internet knows a lot about the world. But it knows nothing about your business. It has never seen your sales records, your invoices, your expense reports. If you ask it "how did my business do last quarter?", it cannot answer, because it does not have your data.
-
-RAG solves this by giving the model a way to look things up before it answers. Think of it this way: imagine you hire a very smart consultant. They are well-read, they understand business, they can reason about complex situations. But they just arrived today and know nothing about your specific company. Before they answer any question, they go to your filing cabinet, find the relevant documents, read them, and then form their answer based on what they found. That is RAG. The filing cabinet is your business data. The consultant is the language model.
-
-The other key development is what is called an agentic workflow. Traditional question-and-answer AI goes in one step: you ask, it answers. An agentic workflow is more like how a good analyst actually works. When you ask a complex question, the system breaks it into sub-questions, investigates each one, checks whether the findings are consistent, and then synthesizes an answer. It can run multiple investigations in parallel. It can flag uncertainty. It can say "I found evidence for this, but I also found a conflicting data point you should look at."
-
-These technologies existed in research labs in 2021. By 2024, they were available as well-maintained open-source libraries that anyone with programming knowledge could use. That is when I decided to rebuild B.I.A.S.E.D.
-
----
-
-## What B.I.A.S.E.D. is today
-
-The name is the same. The acronym is the same. The problem it is trying to solve is the same. Almost everything else is different.
-
-B.I.A.S.E.D. today is an AI investigation engine for business data. The key word is "investigation," not "retrieval." It does not just find relevant records. It reasons about them.
-
-Here is what using it actually looks like.
-
-You bring your business data: sales records, expense logs, invoices, anything in a structured or semi-structured format. The system reads and understands this data not as raw rows and columns, but as meaning. It stores a semantic representation of your data using a technology called pgvector -- a database extension that can find information based on what it means, not just what it literally says. This means if you ask about "March performance" and your records say "third month," it will still find them.
-
-You ask a question. In plain English. Something like: "My sales in the second week of April were unusually low. What might have caused this, and does the pattern match anything from previous years?"
-
-B.I.A.S.E.D. does not answer immediately. It investigates. It uses a framework called LangGraph to run a multi-step process: it breaks the question into components, searches your data for relevant evidence, checks whether patterns from previous years match, identifies any conflicting information, and then assembles an answer. The answer comes with citations -- specific references to the records it used -- and a confidence score. If the evidence is thin or ambiguous, it tells you that too.
-
-You can also explore scenarios. "What would my cash position look like in three months if sales stay flat but costs increase by 10%?" The system reasons through this against your actual historical data, not a generic financial model.
-
-A few things worth being explicit about.
-
-It runs entirely on your machine if you want it to. The Ollama integration means no data has to leave your computer. You are not sending your business records to a cloud server somewhere. For small business owners who are rightly concerned about data privacy, this matters.
-
-It is free. The entire codebase is released under the Apache-2.0 license, which means you can use it, modify it, and build on it without paying anyone anything. The source code is at [github.com/theSelfSa/biased](https://github.com/theSelfSa/biased).
-
-Multiple people can use it simultaneously. The same multi-user workspace design from the original version is preserved: one workspace, multiple team members, role-based access so administrators control who can see what.
-
-It works on mobile as well as desktop, built as a Progressive Web App (PWA). Same device-agnostic philosophy as the original Android application, but now available on any platform without an app store.
-
----
-
-## How a question becomes an answer
-
-For readers who want to understand the mechanics without diving into code, here is the flow.
-
-When you type a question, the system first converts it into a mathematical representation of its meaning -- a vector embedding. This is the same kind of representation used to store your business data. By converting both your question and your data into the same format, the system can find data that is semantically related to your question, not just data that contains the exact same words.
-
-It then passes this context -- your question plus the most relevant portions of your data -- to a language model. If you have chosen to use Ollama, this model runs locally on your machine. If you have configured a cloud provider like OpenAI or Anthropic, it goes there. Either way, the model receives the evidence and reasons about it.
-
-The LangGraph orchestration layer adds the multi-step investigation capability. Rather than a single pass, the system can run multiple queries, compare findings, check for inconsistencies, and build up a richer answer before responding. This is the agentic workflow: the system acts more like an analyst building a case than a search engine returning a list.
-
-The MCP (Model Context Protocol) server layer means the system can also connect to external tools and data sources -- your accounting software, your inventory system, external market data -- and incorporate that into its reasoning.
-
-The final answer includes the reasoning chain, the specific data points used as evidence, and a confidence assessment. This is intentional: a business owner making a real decision deserves to know not just what the AI thinks, but why, and how sure it is.
-
----
-
-## The honest comparison
-
-Here is a straightforward look at what B.I.A.S.E.D. offers compared to established paid tools:
+*The business intelligence landscape in 2025. Large enterprises have well-supported options at significant cost. The bottom-right quadrant -- high capability, low cost -- is what B.I.A.S.E.D. is trying to occupy.*
 
 | Tool | Cost | Conversational AI | Runs locally | Open source |
 |---|---|---|---|---|
@@ -134,60 +43,339 @@ Here is a straightforward look at what B.I.A.S.E.D. offers compared to establish
 | Microsoft Copilot | $30/user/month | Yes | No | No |
 | IBM Watson | Enterprise pricing | Yes | No | No |
 | Zoho Analytics | $24/month | Limited | No | No |
-| Google Looker Studio | Free (with limits) | No | No | No |
+| Google Looker Studio | Free (limited) | No | No | No |
 | Power BI Desktop | Free (basic) | No | No | No |
 | **B.I.A.S.E.D.** | **Free** | **Yes** | **Yes (Ollama)** | **Yes (Apache-2.0)** |
 
-What B.I.A.S.E.D. does not offer: a dedicated support team, a service level agreement, a polished enterprise UI, or guaranteed uptime from a managed infrastructure. These things matter for large organizations. For a small business owner who cannot afford $50 per user per month, they are not the relevant trade-off.
-
-The relevant question is: can a beauty parlour owner, a grocery store owner, or a small logistics operator get useful, honest answers about their business data without spending money they do not have? That is the problem B.I.A.S.E.D. is built to solve.
+Free tools like Google Looker Studio or Power BI Desktop exist, but they require technical setup and data pipeline knowledge that most small business owners do not have and should not need. The gap is not just price -- it is the combination of price and accessibility.
 
 ---
 
-## Who this is for
+## The first version: LSTM and what it taught us
 
-The original version of this project was tested on a jaggery wholesale store. That specificity matters. It was not tested on a hypothetical business with clean, complete, well-formatted data. It was tested on the actual records of an actual business: daily entries, some missing, some with unusual spikes, none of it formatted for a machine.
+The original application used [Long Short-Term Memory (LSTM) networks](https://www.bioinf.jku.at/publications/older/2604.pdf) -- a type of recurrent neural network designed specifically for time-series data, proposed by Hochreiter and Schmidhuber in 1997. Unlike standard feed-forward networks, LSTM cells maintain an internal memory state controlled by three gates: an input gate that decides what new information to store, a forget gate that decides what to discard, and an output gate that decides what to pass forward. This gating mechanism lets the network learn patterns across long time spans without the vanishing gradient problem that makes ordinary RNNs impractical on real sequences.
 
-B.I.A.S.E.D. today is built for the same kind of businesses. Small retail: grocery stores, wholesale traders, boutiques, electronics shops. Service businesses: beauty parlours, repair workshops, tutoring centers, travel agencies. Any business where the owner or manager has data -- in some form, however messy -- and questions they cannot currently answer.
+For a business with daily sales records, this is a natural fit. The model treats each day's sales figure as a time step and learns to predict the next value from the history of previous values.
 
-It is not built for Fortune 500 companies. Those companies have dedicated data teams, expensive tools, and the infrastructure to support them. B.I.A.S.E.D. is not trying to compete with Tableau or Power BI. It is trying to give businesses that cannot access those tools something genuinely useful.
+```python
+# Keras LSTM setup used in the original version
+model = Sequential()
+model.add(LSTM(4, input_shape=(1, look_back)))
+model.add(Dense(1))
+model.compile(loss='mean_squared_error', optimizer='adam')
+model.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
+```
 
-The technical requirement to run it is: a computer and someone who can follow a setup guide. With Docker Compose, the entire system can be started with a single command. With Ollama, no API keys or cloud accounts are needed. The barrier is not zero, but it is as low as we know how to make it.
+On the jaggery store dataset, accuracy improved consistently as more entries were added -- which is exactly the right behavior for a tool meant to grow with a business. The application also had multi-user workspaces, customizable tags per business type, and CSV-based record import. It was deployed with local vendors and used in production.
 
----
+What it could not do: answer a question. LSTM produces a number -- a predicted sales figure for next week. It cannot tell you why last week was low. It cannot reason about your specific business context. It cannot connect a sales dip to a local holiday, a supplier delay, or a price change you made three months ago. It predicts. It does not understand.
 
-## Why this still matters
-
-In 2017, when the first version of this idea was written up, the argument was about smartphone penetration opening a new channel to reach small businesses with technology they had never had access to. That argument was right, but the technology of the time could only go so far. LSTM could predict a trend line. It could not answer a question.
-
-The argument today is different. The technology has arrived. Large language models that can understand plain-language questions and reason about specific data are not theoretical. They run on laptops. They are free to use. The infrastructure to build with them is open source and well-documented.
-
-What has not arrived is the application layer that makes this accessible to the businesses that need it most. Salesforce and Microsoft have built excellent tools for organizations with the budget and technical infrastructure to use them. The Missing Middle is still missing.
-
-B.I.A.S.E.D. is one attempt to close that gap. It is open source because the kind of democratization this problem requires cannot happen through closed software. It is free because the businesses that need it most are the ones who cannot pay. It runs locally because data privacy is not a luxury.
-
-The jaggery store owner with the notebook should be able to ask his records a question and get an answer. That is what this project is for.
+That distinction -- predicting versus understanding -- is the core problem that the rebuilt version addresses.
 
 ---
 
-## For the technically curious
+## What changed between 2021 and 2025
 
-If you want to understand what is happening under the hood:
+Two developments made B.I.A.S.E.D.'s current architecture possible.
 
-- **RAG (Retrieval-Augmented Generation):** The seminal paper by Patrick Lewis et al. at Facebook AI Research (2020) introduced this approach. [Read the paper](https://arxiv.org/abs/2005.11401).
-- **LSTM Networks:** The original architecture was proposed by Sepp Hochreiter and Jurgen Schmidhuber in 1997. [The paper](https://www.bioinf.jku.at/publications/older/2604.pdf) is still worth reading.
-- **LangGraph:** The framework used for multi-agent orchestration in B.I.A.S.E.D. [Documentation](https://langchain-ai.github.io/langgraph/).
-- **pgvector:** The PostgreSQL extension that enables semantic search over business data. [GitHub](https://github.com/pgvector/pgvector).
-- **Ollama:** The tool that makes running large language models locally practical. [ollama.com](https://ollama.com).
-- **The "Missing Middle":** Dun & Bradstreet's analysis of India's SMB gap has been referenced in multiple economic policy discussions. The original framing appears in their India Business Register reports.
-- **Apache-2.0 License:** The license under which B.I.A.S.E.D. is released. [What it means in plain English](https://www.apache.org/licenses/LICENSE-2.0).
+**Large language models that can reason about your specific data.**
+
+Models like GPT-4o, Claude, and the open-source Llama family can receive a business question in plain English, process structured context about your business, and produce a reasoned answer with supporting evidence. This is qualitatively different from LSTM: instead of predicting a number from a sequence, the model reasons about meaning.
+
+The challenge is that these models are trained on the internet, not on your business. They know nothing about your sales, your suppliers, or your specific situation. This is where RAG comes in.
+
+**Retrieval-Augmented Generation (RAG).**
+
+[RAG was introduced by Patrick Lewis et al. at Facebook AI Research in 2020](https://arxiv.org/abs/2005.11401). The core idea: before the language model answers a question, retrieve relevant documents from a private knowledge base and include them as context. The model reasons over your documents, not just its training data.
+
+For a non-technical reader: imagine hiring a consultant who is brilliant but just arrived today. Before answering anything, they go to your filing cabinet, find the relevant records, read them, and then form their answer based on what they found. RAG is that process, automated.
+
+For a technical reader: the retrieval step uses vector embeddings -- mathematical representations of text that capture semantic meaning rather than literal keywords. Similar concepts produce similar vectors. This means a query about "slow months" will retrieve documents about "seasonal downturns" even if those exact words never appear together. The embeddings are stored in [pgvector](https://github.com/pgvector/pgvector), a PostgreSQL extension that adds approximate nearest-neighbor search over vector columns.
+
+```sql
+-- pgvector nearest-neighbor retrieval
+SELECT id, content, label
+FROM document_chunks
+ORDER BY embedding <=> query_vector
+LIMIT 10;
+```
+
+The `<=>` operator is the cosine distance function added by pgvector. It finds the chunks whose meaning is closest to the query vector -- in milliseconds, even over large collections.
+
+![RAG architecture: from business data to cited answer](./images/biased-rag-architecture.png)
+
+*The RAG pipeline. Your business data is chunked, embedded, and stored. At query time, the question is embedded and matched against stored chunks. The retrieved evidence feeds the language model, which produces an answer with citations.*
 
 ---
 
-## Source
+## B.I.A.S.E.D. today: architecture and data flow
 
-The full codebase, setup instructions, and documentation are at:
+The current release is v1.0.0-showcase. The repository is a [pnpm monorepo](https://pnpm.io/workspaces) with four main packages:
 
-[github.com/theSelfSa/biased](https://github.com/theSelfSa/biased)
+```
+biased/
+  apps/web/          Next.js PWA frontend
+  apps/api/          FastAPI backend
+  packages/contracts/ Shared Zod types between frontend and API
+  packages/ui/       Reusable UI components
+  infra/             Docker Compose for local deployment
+  data/demo/         Sanitized demo fixtures
+```
 
-The project is open source under Apache-2.0. Contributions, issues, and forks are welcome.
+[Zod](https://zod.dev/) contracts live in a shared package so the TypeScript frontend and Python backend agree on every request and response shape without duplication. If you change a contract, both sides fail their type checks immediately.
+
+The high-level data flow is:
+
+```
+Owner imports data -> API normalizes -> Postgres stores
+                                              |
+                                         pgvector indexes
+                                              |
+User asks question -> Investigation API -> Orchestrator
+                                              |
+                              SQL insight tool + RAG retriever
+                                              |
+                              Response writer assembles evidence
+                                              |
+                         Answer with citations, confidence, risks
+```
+
+![B.I.A.S.E.D. end-to-end query lifecycle](./images/biased-query-lifecycle.png)
+
+*From business data import to a cited, evidence-backed answer. The orchestrator routes through SQL analysis and RAG retrieval before the response writer assembles the final output.*
+
+---
+
+## The investigation pipeline in detail
+
+This is the technical core of B.I.A.S.E.D. Source: `apps/api/src/api/services/agent_orchestration.py`.
+
+When a user submits a question to `POST /api/investigations`, the backend runs the following sequence:
+
+**Step 1 -- Guardrails.**
+
+The question passes through `guard_question`, which blocks SQL injection, control-like prompts, and attempts to access data outside the user's workspace. This is not optional: an AI system that executes arbitrary instructions against a business database is a security risk, not a feature.
+
+**Step 2 -- Task classification.**
+
+The orchestrator infers the task class: `summarize`, `investigate`, or `recommend`. This determines which tools will be invoked and how the response writer will frame the output.
+
+**Step 3 -- Provider selection.**
+
+The runtime mode is read from the workspace's model profile: `local-open` (Ollama on the same machine), `byo-cloud` (user-provided API key for OpenAI, Anthropic, or Groq), or `hybrid` (task-sensitive routing between local and cloud). Provider metadata -- model name, mode, estimated cost per query -- is returned in every response so the user can see exactly what ran.
+
+**Step 4 -- Orchestration route.**
+
+The orchestrator executes a four-step route:
+
+```
+router -> sql_analyst -> rag_retriever -> response_writer
+```
+
+The implementation uses [LangGraph](https://langchain-ai.github.io/langgraph/) when available, with a linear fallback for environments where it cannot be loaded. LangGraph models the orchestration as a directed graph of nodes: each node is a tool call, and the graph controls the sequence, the data passed between steps, and error handling at each stage.
+
+The SQL analyst runs safe, parameterized queries against the operational tables (sales, purchases, expenses) to compute metrics: revenue by period, top products, expense trends. It cannot execute arbitrary SQL -- only a predefined set of read-only analytical queries.
+
+The RAG retriever converts the question to an embedding, runs `<=>` nearest-neighbor search over `document_chunks`, and returns the top matching chunks with their source labels.
+
+**Step 5 -- Response assembly.**
+
+The response writer receives the SQL findings and RAG citations and calls the language model to synthesize a final answer. The model does not see the raw database -- it sees structured context prepared by the preceding tools.
+
+**Step 6 -- Structured output.**
+
+The investigation response has a fixed schema:
+
+```typescript
+// From packages/contracts/src/index.ts
+{
+  summary: string,
+  confidence: number,          // 0 to 1
+  evidence: Evidence[],        // citations with label, detail, source
+  risks: string[],
+  recommendations: string[],
+  provider: string,
+  mode: "local-open" | "byo-cloud" | "hybrid",
+  latency_ms: number,
+  estimated_cost_usd: number,
+  orchestration: {
+    route: string[],
+    toolCalls: ToolCallMeta[]  // name, status, runtime_ms, detail
+  }
+}
+```
+
+The `orchestration.route` and `toolCalls` fields are returned to the client, not hidden. This is deliberate: a business owner making a decision deserves to know what the system actually did to form its answer, not just what the answer is.
+
+A note on the current showcase: the embedding strategy in this release uses a deterministic hashed approach with 24-dimensional vectors for reproducible demo behavior. This prioritizes predictability over production-grade semantic quality. A deployment pointing at a real embedding model (text-embedding-3-small, nomic-embed-text via Ollama, etc.) would replace this with full semantic retrieval.
+
+---
+
+## Importing and storing business data
+
+Before the AI can investigate anything, the data has to get in. B.I.A.S.E.D. uses a two-phase import pipeline to handle real-world messiness without silently corrupting records. Source: `apps/api/src/api/services/demo_data.py`.
+
+**Phase 1 -- Preview.**
+
+`POST /api/import-jobs` accepts CSV or Excel files via [Polars](https://pola.rs/) (for CSV) and [OpenPyXL](https://openpyxl.readthedocs.io/) (for Excel). The API infers column mappings, flags missing required fields, and returns a preview with warnings. The user sees exactly what will be imported before anything is committed.
+
+Supported import types: `sales`, `purchases`, `products`, `expenses`, `recurring_obligations`.
+
+**Phase 2 -- Confirm.**
+
+`POST /api/import-jobs/{id}/confirm` applies the normalized rows into the target domain tables. If anything fails at this stage, no partial data is written -- the confirmation is transactional.
+
+After confirmation, imported documents are chunked (fixed 280-character segments) and their embeddings are written to `document_chunks` with a `vector(24)` column. This is what the RAG retriever searches.
+
+---
+
+## Forecasting and scenario planning
+
+Not all business questions are open-ended. B.I.A.S.E.D. also includes deterministic, explainable analytical tools that do not depend on a language model at all.
+
+**Forecasting** (`POST /api/forecasts/run`) uses a moving-average baseline over recent transactional data. Supported metrics: `sales`, `purchases`, `recurring`, `cash`. The response includes the computed assumptions and any warnings (for example, "insufficient data for reliable 90-day forecast") alongside the numbers. This is intentionally transparent: a single number without its assumptions is not a useful forecast.
+
+**Scenario planning** (`POST /api/scenarios/run`) models four implemented scenarios:
+
+- `supplier_price_increase` -- impact on purchase costs and margins
+- `underperforming_product_line` -- revenue delta from removing or repricing a product
+- `delayed_reorder` -- cash flow impact of a stockout event
+- `rent_electricity_increase` -- operating cost impact on net position
+
+Each scenario returns a structured diff: baseline values, projected values, and impact deltas, with recommendations. The calculations are deterministic and auditable -- no black-box AI involved.
+
+**Scheduler** (`POST /api/scheduler/run`) scans recurring obligations and transaction patterns to produce a brief with upcoming obligations, detected anomalies, and reminders. This runs on a schedule to keep the action center populated.
+
+---
+
+## MCP: connecting to external tools
+
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io/) is an open standard introduced by Anthropic in 2024 that defines how AI systems can expose tools to external clients in a structured, interoperable way. B.I.A.S.E.D. implements a JSON-RPC MCP endpoint at `POST /mcp`. Source: `apps/api/src/api/services/mcp_rpc.py`.
+
+Exposed JSON-RPC methods:
+
+```
+initialize           Handshake and capability negotiation
+tools/list           Returns the available tool schemas
+tools/call           Executes a named tool with arguments
+```
+
+Exposed tools:
+
+```
+investigate          Submit a business question for AI investigation
+run_forecast         Run a metric forecast
+run_scenario         Run a named scenario plan
+run_scheduler        Trigger the scheduler run
+read_import_ledger   Inspect the import job history
+```
+
+This means any MCP-compatible client -- including other AI agents, automation tools, or custom scripts -- can invoke B.I.A.S.E.D.'s workflows programmatically, not just through the web UI. A user who wants to run a weekly investigation from a cron job or trigger a forecast from another application can do so through the MCP interface without touching the web frontend.
+
+---
+
+## Data model, RBAC, and the workspace model
+
+Every piece of data in B.I.A.S.E.D. belongs to a workspace. A workspace is the unit of isolation: different businesses are different workspaces, and data never crosses workspace boundaries.
+
+The core operational tables:
+
+```
+workspaces               workspace members
+products                 model_provider_settings
+sales_transactions       business_documents
+purchase_transactions    document_chunks (pgvector)
+expense_entries          import_jobs / import_rows
+recurring_obligations    action_center_items
+                         scheduler_runs
+```
+
+Schema bootstrap lives in `apps/api/src/api/services/demo_data.py`. The frontend uses a [Drizzle ORM](https://orm.drizzle.team/) mirror in `apps/web/lib/schema.ts` so TypeScript types stay in sync with the database schema.
+
+Access control uses three roles enforced through RBAC helpers in `apps/web/lib/rbac.ts`:
+
+- `owner` -- full access: settings, imports, AI features, all data
+- `manager` -- operational access: transactions, imports, AI features
+- `accountant` -- read and expense access: view data, add expenses
+
+[Better Auth](https://www.better-auth.com/) handles session management, email verification, and the auth plumbing in `apps/web/lib/auth.ts`. It is provider-agnostic and does not require a third-party auth service.
+
+---
+
+## Running it: two paths
+
+**Self-hosted (local-first, data stays on your machine).**
+
+```bash
+git clone https://github.com/theSelfSa/biased
+cd biased
+docker compose -f infra/docker-compose.yml up
+```
+
+Docker Compose starts four services:
+
+```
+postgres (pgvector)    port 5433
+ollama                 port 11434
+api (FastAPI)          port 8000
+web (Next.js)          port 3000
+```
+
+With Ollama running locally, no business data ever leaves the machine. The language model runs on the same hardware as the database. For a small business owner handling sensitive financial records, this matters.
+
+**Hosted path.**
+
+For users who want managed infrastructure:
+
+- Web: [Vercel](https://vercel.com/)
+- API: [Render](https://render.com/)
+- Database: [Supabase](https://supabase.com/) with pgvector extension enabled
+
+In this path, the `byo-cloud` mode routes model calls to a cloud provider using the user's own API key. The host never holds the API key beyond the session.
+
+---
+
+## What it does not do (honest limitations)
+
+The current release is labeled v1.0.0-showcase for a reason.
+
+The embedding strategy uses deterministic hashed vectors for reproducibility in the demo environment. Real semantic quality requires a proper embedding model -- Ollama ships several (nomic-embed-text, mxbai-embed-large) and OpenAI's text-embedding-3-small is cost-effective for cloud deployments. The architecture supports swapping this in; the showcase build does not do it automatically.
+
+Enterprise concerns -- SLAs, dedicated support, hardened multi-region infrastructure, compliance certifications -- are out of scope for an open-source single-developer showcase release. Organizations with those requirements need a managed vendor.
+
+The "local-first + open-source" design is a deliberate trade-off: maximum privacy and zero ongoing cost, with the trade-off being that the user manages their own infrastructure and accepts the limitations of whatever local hardware they have.
+
+---
+
+## The bigger point
+
+The jaggery store owner with the notebook should be able to ask his records a question and get a reasoned answer with evidence. Not a chart. Not a number. An answer.
+
+That is still the problem. The technology to solve it now exists and is open source. B.I.A.S.E.D. is one attempt to package it in a way that makes it usable for the businesses that need it most.
+
+[github.com/theSelfSa/biased](https://github.com/theSelfSa/biased) -- Apache-2.0, contributions welcome.
+
+---
+
+## References and further reading
+
+**Core concepts**
+- [Retrieval-Augmented Generation (Lewis et al., 2020)](https://arxiv.org/abs/2005.11401) -- the paper that introduced RAG
+- [Long Short-Term Memory (Hochreiter & Schmidhuber, 1997)](https://www.bioinf.jku.at/publications/older/2604.pdf) -- the original LSTM paper
+- [LangGraph documentation](https://langchain-ai.github.io/langgraph/) -- multi-agent orchestration framework
+- [pgvector on GitHub](https://github.com/pgvector/pgvector) -- vector similarity search for PostgreSQL
+- [Model Context Protocol](https://modelcontextprotocol.io/) -- the MCP standard implemented in B.I.A.S.E.D.
+- [Ollama](https://ollama.com/) -- local model runtime
+
+**Tools used**
+- [FastAPI](https://fastapi.tiangolo.com/) -- async Python API framework
+- [Next.js](https://nextjs.org/) -- React framework for the PWA frontend
+- [Polars](https://pola.rs/) -- fast DataFrame library for CSV import
+- [Better Auth](https://www.better-auth.com/) -- auth framework
+- [Drizzle ORM](https://orm.drizzle.team/) -- TypeScript ORM for schema sync
+- [Zod](https://zod.dev/) -- schema validation for shared contracts
+- [pnpm workspaces](https://pnpm.io/workspaces) -- monorepo tooling
+
+**Context**
+- [OECD: SMEs and Entrepreneurship](https://www.oecd.org/en/topics/small-and-medium-sized-enterprises-and-entrepreneurship.html)
+- [Apache-2.0 License](https://www.apache.org/licenses/LICENSE-2.0)
