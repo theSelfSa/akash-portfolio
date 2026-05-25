@@ -46,7 +46,7 @@ TOTAL  13.26
 
 That is not a structured record. It's a block of text. Turning it into `{merchant: "Whole Foods Market", items: [{name: "Chicken Breast", price: 6.79}, ...]}` requires understanding — not just reading.
 
-![Raw OCR text on the left versus structured JSON with confidence scores on the right](./images/receipt-transform.png)
+![Raw OCR text on the left versus structured JSON with confidence scores on the right](/assets/projects/receipt-transform.png)
 
 *What OCR gives you (left) versus what you actually need (right) — with per-field confidence scores showing how certain the model is about each extraction.*
 
@@ -124,7 +124,7 @@ The system computes an overall confidence score for the extraction. It combines:
 
 Based on this score, three things can happen:
 
-![Diagram showing receipts routed into three lanes based on confidence score](./images/confidence-routing.png)
+![Diagram showing receipts routed into three lanes based on confidence score](/assets/projects/confidence-routing.png)
 
 *Confidence-based routing — the core quality mechanism. A human's time is spent only where the system is genuinely uncertain.*
 
@@ -152,7 +152,7 @@ This is the same technology behind "search for anything and find relevant result
 
 Receipts that scored low confidence land in a review queue. A reviewer sees the original image side-by-side with the extracted data and can correct any field. These corrections are stored as ground truth.
 
-![Cycle diagram showing four stages: human review, corrections stored, LLM error analysis, prompt improved — connected in a loop](./images/learning-loop.png)
+![Cycle diagram showing four stages: human review, corrections stored, LLM error analysis, prompt improved — connected in a loop](/assets/projects/learning-loop.png)
 
 *The learning loop — manual review stops being a cost center and becomes an optimization engine. Each stage feeds the next.*
 
@@ -176,7 +176,7 @@ I ran a 50-receipt sample using Groq (a fast, low-cost inference provider) under
 | Line-item name fuzzy | 40.9% | 36.7% |
 | Avg latency per receipt | 5.1s | 23.7s |
 
-![Bar chart comparing baseline and tuned prompt across four metrics](./images/benchmark-chart.png)
+![Bar chart comparing baseline and tuned prompt across four metrics](/assets/projects/benchmark-chart.png)
 
 *One round of error analysis moved total exact match from 30% to 44% — at the cost of a 4x latency increase. Line-item name matching regressed slightly due to Korean-language items in the dataset.*
 
