@@ -11,25 +11,8 @@ order: 4
 metrics:
   - "90% success rate on CORD benchmark after prompt tuning"
   - "44.4% total exact field match (up from 30.2% baseline)"
-  - "Confidence routing: high → auto-complete, low → human review"
+  - "Confidence routing: high to auto-complete, low to human review"
   - "Human-in-the-loop correction loop drives continuous improvement"
-images:
-  - src: "./images/receipt-transform.png"
-    alt: "Raw OCR text on the left transforming into structured JSON with per-field confidence scores on the right"
-    caption: "What OCR gives you vs. what you actually need"
-    placement: "after-ocr-explanation"
-  - src: "./images/confidence-routing.png"
-    alt: "Diagram showing receipts routed into three lanes based on confidence score: above 85% auto-completes, 65-85% flags fields, below 65% goes to full human review"
-    caption: "Confidence-based routing — the most important quality mechanism in the system"
-    placement: "after-confidence-table"
-  - src: "./images/learning-loop.png"
-    alt: "Cycle diagram: human review feeds corrections, corrections trigger LLM error analysis, analysis suggests prompt fixes, fixes improve extractions"
-    caption: "The active learning loop — manual review becomes training signal"
-    placement: "after-learning-loop-intro"
-  - src: "./images/benchmark-chart.png"
-    alt: "Bar chart comparing baseline vs tuned prompt performance across four metrics: success rate, total exact match, line-item price, line-item name"
-    caption: "Baseline vs. tuned prompt — 50-receipt CORD sample"
-    placement: "after-benchmark-table"
 ---
 
 ## The problem with "just use AI"
@@ -63,11 +46,9 @@ TOTAL  13.26
 
 That is not a structured record. It's a block of text. Turning it into `{merchant: "Whole Foods Market", items: [{name: "Chicken Breast", price: 6.79}, ...]}` requires understanding — not just reading.
 
-<ImageEmbed
-  src="./images/receipt-transform.png"
-  alt="Raw OCR text on the left transforming into structured JSON with per-field confidence scores on the right"
-  caption="What OCR gives you (left) versus what you actually need (right) — with per-field confidence scores showing how certain the model is about each extraction"
-/>
+![Raw OCR text on the left versus structured JSON with confidence scores on the right](./images/receipt-transform.png)
+
+*What OCR gives you (left) versus what you actually need (right) — with per-field confidence scores showing how certain the model is about each extraction.*
 
 **Problem 2: Every receipt is different.**
 
@@ -96,21 +77,21 @@ The result is a full pipeline — from image upload to structured data to qualit
 
 ## How it works, step by step
 
-Think of the pipeline as an assembly line with a quality inspector at the end. Here's what happens to every receipt that enters the system.
+Think of the pipeline as an assembly line with a quality inspector at the end. Here is what happens to every receipt that enters the system.
 
 ### Step 1: The receipt arrives
 
 A user uploads a photo or PDF of a receipt through the API. The system immediately responds with a receipt ID and a status of "processing." This is important: the system does not make you wait while it processes. It queues the work and sends you a ticket.
 
-This pattern — accepting work immediately and processing in the background — is called **asynchronous processing**. It's how almost every modern web service works. When you post a photo on Instagram, it doesn't make your phone wait while it resizes and compresses the image for every screen size. It queues that work, confirms your upload, and processes in the background.
+This pattern — accepting work immediately and processing in the background — is called **asynchronous processing**. It is how almost every modern web service works. When you post a photo on Instagram, it does not make your phone wait while it resizes and compresses the image for every screen size. It queues that work, confirms your upload, and processes in the background.
 
 Here, the background processing is handled by **Celery** (a task queue) and **Redis** (an in-memory database that acts as the message broker between the API and the workers). Think of Redis as a bulletin board where the API posts jobs, and workers come and pick them up.
 
 ### Step 2: Reading the image (OCR)
 
-The worker picks up the task and first tries to extract the raw text from the image. It uses **AWS Textract** as its primary tool — a cloud service from Amazon that is particularly good at documents and tables. If Textract isn't available (for example, in local development without AWS credentials), it falls back to **Tesseract**, a free open-source OCR engine.
+The worker picks up the task and first tries to extract the raw text from the image. It uses **AWS Textract** as its primary tool — a cloud service from Amazon that is particularly good at documents and tables. If Textract is not available (for example, in local development without AWS credentials), it falls back to **Tesseract**, a free open-source OCR engine.
 
-Textract does something useful beyond just reading text: it also returns a confidence score for each word. When it reads `CHKN BRST`, it might say it's 96% confident. When it reads a smudged total, it might say 71%. These word-level scores matter later.
+Textract does something useful beyond just reading text: it also returns a confidence score for each word. When it reads `CHKN BRST`, it might say it is 96% confident. When it reads a smudged total, it might say 71%. These word-level scores matter later.
 
 ### Step 3: Understanding the text (structured extraction)
 
@@ -118,7 +99,7 @@ Raw text goes in. Structured data needs to come out.
 
 This is where a large language model (LLM) comes in. The system sends the raw OCR text to GPT-4o or a Groq-hosted model, along with a very specific instruction: "Return this as a structured receipt with these exact fields. Nothing else."
 
-The "nothing else" part is enforced by a library called **Instructor**, which works with a tool called **Pydantic** to define exactly what shape the response must take. If the AI tries to return something that doesn't fit the schema — say, it puts text where a number should be — Instructor automatically retries with a correction prompt.
+The "nothing else" part is enforced by a library called **Instructor**, which works with a tool called **Pydantic** to define exactly what shape the response must take. If the AI tries to return something that does not fit the schema — say, it puts text where a number should be — Instructor automatically retries with a correction prompt.
 
 ```python
 class LineItem(BaseModel):
@@ -139,23 +120,21 @@ This is the most important step in the whole pipeline, and the one that separate
 The system computes an overall confidence score for the extraction. It combines:
 - The average OCR word confidence from Textract
 - The model's self-assessed confidence for each field
-- A set of sanity checks: Does the subtotal plus tax equal the total? Is the date in a reasonable range? Does the merchant name look real?
+- A set of sanity checks: does the subtotal plus tax equal the total? Is the date in a reasonable range? Does the merchant name look real?
 
 Based on this score, three things can happen:
 
-<ImageEmbed
-  src="./images/confidence-routing.png"
-  alt="Diagram showing receipts routed into three lanes: above 85% auto-completes, 65-85% flags specific fields, below 65% goes to full human review"
-  caption="Confidence-based routing — the core quality mechanism. A human's time is spent only where it matters."
-/>
+![Diagram showing receipts routed into three lanes based on confidence score](./images/confidence-routing.png)
+
+*Confidence-based routing — the core quality mechanism. A human's time is spent only where the system is genuinely uncertain.*
 
 | Confidence level | What happens |
 |---|---|
 | **High** (above 85%) | Auto-complete. The receipt is stored and marked done. |
-| **Medium** (65–85%) | Specific fields are flagged for human review. |
+| **Medium** (65 to 85%) | Specific fields are flagged for human review. |
 | **Low** (below 65%) | The entire receipt goes into the review queue. |
 
-This routing is the equivalent of a quality inspector on an assembly line who doesn't check every item — only the ones the machine flagged as uncertain. It scales. A human's time is spent where it matters.
+This routing is the equivalent of a quality inspector on an assembly line who does not check every item — only the ones the machine flagged as uncertain. It scales. A human's time is spent where it matters.
 
 ### Step 5: Matching items to a catalog
 
@@ -163,21 +142,19 @@ Once line items are extracted, the system tries to match them to a canonical pro
 
 Two approaches are used:
 
-**Fuzzy matching** is the fast, first-pass approach. It looks for text similarity — how close is `MILK WHL GAL` to `Whole Milk, 1 Gallon`? If they're similar enough (above a threshold), it's a match.
+**Fuzzy matching** is the fast, first-pass approach. It looks for text similarity — how close is `MILK WHL GAL` to `Whole Milk, 1 Gallon`? If they are similar enough (above a threshold), it is a match.
 
-**Semantic matching** is used when fuzzy matching isn't confident enough. It converts the text into a numerical representation (called an **embedding**) that captures meaning, not just spelling. Two phrases that mean the same thing will have similar embeddings even if they share no words. These embeddings are stored in **pgvector**, a PostgreSQL extension that can find the most similar embedding to a query in milliseconds.
+**Semantic matching** is used when fuzzy matching is not confident enough. It converts the text into a numerical representation (called an **embedding**) that captures meaning, not just spelling. Two phrases that mean the same thing will have similar embeddings even if they share no words. These embeddings are stored in **pgvector**, a PostgreSQL extension that can find the most similar embedding to a query in milliseconds.
 
-This is the same technology behind "search for anything and find relevant results even if you didn't use the exact words."
+This is the same technology behind "search for anything and find relevant results even if you did not use the exact words."
 
 ### Step 6: Human review and the learning loop
 
 Receipts that scored low confidence land in a review queue. A reviewer sees the original image side-by-side with the extracted data and can correct any field. These corrections are stored as ground truth.
 
-<ImageEmbed
-  src="./images/learning-loop.png"
-  alt="Cycle diagram showing four stages: human review, corrections stored, LLM error analysis finds patterns, prompt improved — all connected in a clockwise loop"
-  caption="The learning loop — manual review stops being a cost center and becomes an optimization engine"
-/>
+![Cycle diagram showing four stages: human review, corrections stored, LLM error analysis, prompt improved — connected in a loop](./images/learning-loop.png)
+
+*The learning loop — manual review stops being a cost center and becomes an optimization engine. Each stage feeds the next.*
 
 Nightly, the system runs an error analysis job. It pulls all corrections from the past week, groups them by type (date format errors, price misattributions, quantity parsing failures), and asks the AI to identify patterns. The output is a suggested prompt fix — a change to the instructions given to the extraction model that would prevent the same class of mistake next time.
 
@@ -199,11 +176,9 @@ I ran a 50-receipt sample using Groq (a fast, low-cost inference provider) under
 | Line-item name fuzzy | 40.9% | 36.7% |
 | Avg latency per receipt | 5.1s | 23.7s |
 
-<ImageEmbed
-  src="./images/benchmark-chart.png"
-  alt="Horizontal bar chart comparing baseline and tuned prompt across four metrics, showing green tuned bars extending further than gray baseline bars except for line-item name fuzzy match"
-  caption="One round of error analysis moved total exact match from 30% to 44% — at the cost of a 4x latency increase"
-/>
+![Bar chart comparing baseline and tuned prompt across four metrics](./images/benchmark-chart.png)
+
+*One round of error analysis moved total exact match from 30% to 44% — at the cost of a 4x latency increase. Line-item name matching regressed slightly due to Korean-language items in the dataset.*
 
 A few things are worth noting honestly:
 
@@ -213,7 +188,7 @@ A few things are worth noting honestly:
 
 **Accuracy comes at a latency cost.** The tuned configuration takes nearly five times longer per receipt. This is a genuine production tradeoff — better answers sometimes mean slower answers. In a system with asynchronous processing, latency is more manageable than in a synchronous one, but it still affects throughput.
 
-**30%–44% exact match is not a typo.** Exact match is a strict metric: if the extracted price is `$6.79` and the ground truth says `$6.80` (rounding difference), that counts as a miss. Fuzzy match scores, which allow for minor variation, are higher. Real production systems often use fuzzy match thresholds for evaluation.
+**30 to 44% exact match is not a typo.** Exact match is a strict metric: if the extracted price is `$6.79` and the ground truth says `$6.80` (rounding difference), that counts as a miss. Fuzzy match scores, which allow for minor variation, are higher. Real production systems often use fuzzy match thresholds for evaluation.
 
 These numbers are a starting point, not a ceiling. The benchmark infrastructure exists precisely so improvements can be measured rather than assumed.
 
@@ -221,7 +196,7 @@ These numbers are a starting point, not a ceiling. The benchmark infrastructure 
 
 ## What this is not
 
-It's worth being clear about scope.
+It is worth being clear about scope.
 
 This is a **research and demonstration project**, not a deployed production service. It is designed to show the architecture, the active learning loop, and the benchmark methodology — not to handle millions of receipts at commercial scale. At that scale, additional concerns arise: distributed worker fleets, multi-region redundancy, stricter SLAs, billing integrations, and much more.
 
@@ -235,7 +210,7 @@ For those who want to understand the underlying ideas better:
 
 - **OCR (Optical Character Recognition):** [AWS guide to OCR](https://aws.amazon.com/what-is/ocr/) — a good plain-English explanation
 - **Large Language Models:** [What is a large language model?](https://www.cloudflare.com/learning/ai/what-is-large-language-model/) — Cloudflare's accessible overview
-- **Active Learning:** The idea of letting a model flag which examples it's most uncertain about, then having a human label only those. [A visual explanation from Google](https://cloud.google.com/blog/topics/developers-practitioners/active-learning-machine-learning)
+- **Active Learning:** The idea of letting a model flag which examples it is most uncertain about, then having a human label only those. [A visual explanation from Google](https://cloud.google.com/blog/topics/developers-practitioners/active-learning-machine-learning)
 - **Vector embeddings and semantic search:** [What are embeddings?](https://openai.com/blog/introducing-text-and-code-embeddings) — OpenAI's explanation of how meaning becomes numbers
 - **pgvector:** [pgvector on GitHub](https://github.com/pgvector/pgvector) — how PostgreSQL handles similarity search
 - **Weak supervision:** Using noisy or imperfect labels (like LLM outputs) as training data when clean labels are expensive. [The Snorkel paper](https://arxiv.org/abs/1711.10160) introduced this idea formally
