@@ -18,7 +18,7 @@ export default function Skills() {
             <div className="h-px flex-1 max-w-12 bg-accent-brand opacity-40 accent-transition" />
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">Skills & Technologies</h2>
-          <p className="text-muted-foreground mt-2 text-sm">Curated for ML Engineer and Software Engineer roles.</p>
+          <p className="text-muted-foreground mt-2 text-sm">Tools and technologies I use, grouped by area.</p>
         </motion.div>
 
         {/* Skills Grid */}

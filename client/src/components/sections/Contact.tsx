@@ -20,7 +20,7 @@ const contactLinks = [
   {
     icon: Github,
     label: 'GitHub',
-    value: 'github.com/TheSelfSa',
+    value: 'github.com/theSelfSa',
     href: personal.github,
     description: 'Open source work & projects',
   },
@@ -39,7 +39,7 @@ export default function Contact() {
           className="mb-14"
         >
           <div className="flex items-center gap-3 mb-3">
-            <span className="font-mono-custom text-xs text-accent-brand accent-transition tracking-widest uppercase">05</span>
+            <span className="font-mono-custom text-xs text-accent-brand accent-transition tracking-widest uppercase">06</span>
             <div className="h-px flex-1 max-w-12 bg-accent-brand opacity-40 accent-transition" />
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">Get in Touch</h2>
@@ -60,7 +60,7 @@ export default function Contact() {
               If you have an opportunity that aligns with my background, I'd love to hear from you.
             </p>
             <p className="text-base text-muted-foreground leading-relaxed">
-              Whether it's a quick question about my work, a project collaboration, or a job opportunity - my inbox is always open.
+              For a question about my work, a collaboration, or a role, email is the fastest way to reach me.
             </p>
 
             {/* Location */}

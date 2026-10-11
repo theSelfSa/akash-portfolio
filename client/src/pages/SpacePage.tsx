@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, BookOpen, Music, FileText, MessageSquare, Star, ExternalLink, ArrowUpRight } from 'lucide-react';
+import { formatMonth } from '@/lib/utils';
 import { getAllSpaceItems, type SpaceMeta } from '@/lib/content';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -51,7 +52,7 @@ function SpaceCard({ item }: { item: SpaceMeta }) {
           {item.category === 'thoughts' && <MessageSquare size={11} />}
           {item.category}
         </span>
-        <span className="font-mono-custom text-xs text-muted-foreground">{item.date}</span>
+        <span className="font-mono-custom text-xs text-muted-foreground">{formatMonth(item.date)}</span>
       </div>
 
       {/* Title */}

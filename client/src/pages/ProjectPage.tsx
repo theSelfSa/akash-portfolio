@@ -2,6 +2,7 @@ import { useParams, Link } from 'wouter';
 import { MDXProvider } from '@mdx-js/react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Github, ExternalLink, Calendar, Tag } from 'lucide-react';
+import { formatMonth } from '@/lib/utils';
 import { getProjectBySlug } from '@/lib/content';
 import { mdxComponents } from '@/components/MDXComponents';
 import Navbar from '@/components/Navbar';
@@ -57,7 +58,7 @@ export default function ProjectPage() {
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono-custom">
                   <Calendar size={11} />
-                  {meta.date}
+                  {formatMonth(meta.date)}
                 </span>
               </div>
 

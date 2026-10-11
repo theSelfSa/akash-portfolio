@@ -11,6 +11,7 @@
 
 import { motion } from 'framer-motion';
 import { Github, ExternalLink, ArrowUpRight, Zap } from 'lucide-react';
+import { formatMonth } from '@/lib/utils';
 import { useLocation } from 'wouter';
 import { getFeaturedProjects } from '@/lib/content';
 
@@ -56,10 +57,10 @@ export default function Projects() {
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
               <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">Featured Projects</h2>
-              <p className="text-muted-foreground mt-2 text-sm max-w-lg">Selected work showcasing depth in AI/ML and systems engineering. Click any card for the full case study.</p>
+              <p className="text-muted-foreground mt-2 text-sm max-w-lg">Things I've built. Click a card to read the full case study.</p>
             </div>
             <a
-              href="https://github.com/TheSelfSa"
+              href="https://github.com/theSelfSa"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-accent-brand transition-colors duration-200 accent-transition border border-border hover:border-accent-brand px-4 py-2 rounded-lg flex-shrink-0 self-start sm:self-auto"
@@ -134,7 +135,7 @@ function ProjectCard({ project, idx }: { project: ReturnType<typeof getFeaturedP
         {/* Date - top-right */}
         <div className="absolute top-3 right-3">
           <span className="font-mono-custom text-xs text-white/60 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-md">
-            {project.date}
+            {formatMonth(project.date)}
           </span>
         </div>
       </div>

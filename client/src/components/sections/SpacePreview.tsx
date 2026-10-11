@@ -7,6 +7,7 @@
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, BookOpen, Music, FileText, MessageSquare, Star } from 'lucide-react';
+import { formatMonth } from '@/lib/utils';
 import { getRecentSpaceItems, type SpaceMeta } from '@/lib/content';
 
 const categoryIcon: Record<string, React.ReactNode> = {
@@ -46,7 +47,7 @@ function MiniCard({ item, idx }: { item: SpaceMeta; idx: number }) {
           {categoryIcon[item.category]}
           {item.category}
         </span>
-        <span className="font-mono-custom text-xs text-muted-foreground/60">{item.date}</span>
+        <span className="font-mono-custom text-xs text-muted-foreground/60">{formatMonth(item.date)}</span>
       </div>
       <h4 className="text-sm font-semibold text-foreground group-hover:text-accent-brand transition-colors duration-200 accent-transition leading-snug mb-1">
         {item.title}
@@ -100,11 +101,11 @@ export default function SpacePreview() {
         >
           <div>
             <div className="flex items-center gap-3 mb-3">
-              <span className="font-mono-custom text-xs text-accent-brand accent-transition tracking-widest uppercase">06</span>
+              <span className="font-mono-custom text-xs text-accent-brand accent-transition tracking-widest uppercase">05</span>
               <div className="h-px flex-1 max-w-12 bg-accent-brand opacity-40 accent-transition" />
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">My Space</h2>
-            <p className="text-muted-foreground mt-2 text-sm">Books, music, articles, and thoughts - beyond the code.</p>
+            <p className="text-muted-foreground mt-2 text-sm">Books, music, articles, and notes from outside work.</p>
           </div>
           <Link
             href="/space"

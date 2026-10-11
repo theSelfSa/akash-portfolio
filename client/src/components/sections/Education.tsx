@@ -15,7 +15,7 @@ const educationDetails = [
     type: 'Graduate',
     focus: 'AI / Machine Learning',
     highlights: [
-      'Specialized in machine learning systems, LLM research, and production AI engineering.',
+      'Focused on machine learning, deep learning, and NLP.',
       'Coursework: Machine Learning, Deep Learning, NLP, Neural Networks, Automated Learning & Data Analysis, Algorithms & Analysis.',
       'Graduate research focused on evaluation frameworks for AI/ML repositories and LLM-based automation pipelines.',
     ],
@@ -29,9 +29,8 @@ const educationDetails = [
     type: 'Undergraduate',
     focus: 'Software Engineering',
     highlights: [
-      'Built strong CS fundamentals across systems, algorithms, and software engineering.',
       'Coursework: Data Structures & Algorithms, Operating Systems, Database Management, Computer Networks, Artificial Intelligence.',
-      'Early exposure to distributed systems, software architecture, and applied AI concepts.',
+      'Completed a research internship at TRDDC and a software engineering internship at Principal Global Services during the degree.',
     ],
     tags: ['DSA', 'Operating Systems', 'DBMS', 'Computer Networks', 'Software Engineering'],
   },
@@ -51,12 +50,12 @@ export default function Education() {
           className="mb-14"
         >
           <div className="flex items-center gap-3 mb-3">
-            <span className="font-mono-custom text-xs text-accent-brand accent-transition tracking-widest uppercase">03</span>
+            <span className="font-mono-custom text-xs text-accent-brand accent-transition tracking-widest uppercase">02</span>
             <div className="h-px flex-1 max-w-12 bg-accent-brand opacity-40 accent-transition" />
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">Education</h2>
           <p className="text-muted-foreground mt-2 text-sm">
-            Computer science built across two continents - from core engineering to graduate-level AI research.
+            B.Tech in India, M.S. in the US, both in Computer Science.
           </p>
         </motion.div>
 

@@ -27,7 +27,7 @@ export default function Experience() {
           className="mb-14"
         >
           <div className="flex items-center gap-3 mb-3">
-            <span className="font-mono-custom text-xs text-accent-brand accent-transition tracking-widest uppercase">02</span>
+            <span className="font-mono-custom text-xs text-accent-brand accent-transition tracking-widest uppercase">01</span>
             <div className="h-px flex-1 max-w-12 bg-accent-brand opacity-40 accent-transition" />
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">Experience</h2>
