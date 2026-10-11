@@ -15,7 +15,10 @@ export const personal = {
   linkedin: 'https://linkedin.com/in/akashkore',
   github: 'https://github.com/theSelfSa',
   available: true,
-  availabilityNote: 'Relocating to Pune · Can join immediately\nOpen to full-time AI/ML roles',
+  // Hero status block, one short line each (the column is 260px wide)
+  heroLocation: 'Relocating to Pune, India',
+  availability: 'Can join immediately',
+  openTo: 'Open to full-time AI/ML roles',
   currentRole: 'AI Software Engineer @ Ready Tensor',
   latestDegree: 'M.S. Computer Science, NC State · 2025',
   profilePhoto: '/assets/Akash_Kore_Profile.png',

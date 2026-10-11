@@ -11,7 +11,7 @@
  *   - Skill tags: flat pills, no card backgrounds - information, not decoration
  *
  * Layout:
- *   LEFT (30%): photo (circle) → green dot → location → open to relocation → F-1 OPT → social links
+ *   LEFT (30%): photo (circle) → location → availability pill → roles line → social links
  *   RIGHT (65%): name (large) → title (accent) → role + degree (one credibility line) →
  *                summary → metric cards (2×2) → skill tags → CTAs
  */
@@ -43,7 +43,6 @@ const metricIcons = [TrendingUp, DollarSign, Activity, Users];
 
 export default function Hero() {
   const [pdfOpen, setPdfOpen] = useState(false);
-  const [availabilityPrimary, availabilitySecondary] = personal.availabilityNote.split('\n');
 
   return (
     <>
@@ -97,23 +96,21 @@ export default function Hero() {
                 </div>
               </div>
 
-              {/* Location + availability meta */}
-              <div className="flex flex-col items-center gap-1.5 self-center text-center">
+              {/* Location + availability: one line each, all centered on the photo's axis */}
+              <div className="flex flex-col items-center gap-2 self-center text-center">
                 <div className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground">
                   <MapPin size={13} className="flex-shrink-0 text-muted-foreground/60" />
-                  <span>{personal.location}</span>
+                  <span>{personal.heroLocation}</span>
                 </div>
-                <div className="flex items-start justify-center gap-1.5 text-xs text-muted-foreground/70 font-medium">
-                  {/* Subtle availability indicator: soft green ring + inner dot with slow ping */}
-                  <span className="relative flex-shrink-0 w-2.5 h-2.5 mt-1" aria-hidden="true">
-                    <span className="absolute inset-0 rounded-full bg-emerald-500/25 animate-ping" style={{ animationDuration: '2.8s' }} />
-                    <span className="relative block w-2.5 h-2.5 rounded-full bg-emerald-400/70 ring-1 ring-emerald-500/30" />
+                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-600/25 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-400/25 dark:text-emerald-300">
+                  {/* Soft green dot with a slow ping */}
+                  <span className="relative flex-shrink-0 w-2 h-2" aria-hidden="true">
+                    <span className="absolute inset-0 rounded-full bg-emerald-500/40 animate-ping" style={{ animationDuration: '2.8s' }} />
+                    <span className="relative block w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400" />
                   </span>
-                  <span className="leading-tight text-left">
-                    <span className="block">{availabilityPrimary}</span>
-                    {availabilitySecondary ? <span className="block">{availabilitySecondary}</span> : null}
-                  </span>
+                  <span>{personal.availability}</span>
                 </div>
+                <p className="text-xs text-muted-foreground/80">{personal.openTo}</p>
               </div>
 
               {/* Social links - horizontal icon-only row, left-aligned */}
