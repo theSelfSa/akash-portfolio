@@ -9,17 +9,17 @@ export const personal = {
   firstName: 'Akash',
   title: 'AI Software Engineer | ML Systems & Agentic AI',
   tagline: 'Building Production AI Systems That Actually Ship.',
-  location: 'Raleigh, NC· Open to Relocation',
+  location: 'Pune, India',
   email: 'aakashkore@gmail.com',
   phone: '(919) 559-4937',
   linkedin: 'https://linkedin.com/in/akashkore',
   github: 'https://github.com/TheSelfSa',
   available: true,
-  availabilityNote: 'F-1 OPT, STEM extension filed\nOpen to full-time roles',
+  availabilityNote: 'Relocating to Pune · Can join immediately\nOpen to full-time AI/ML roles',
   currentRole: 'AI Software Engineer @ Ready Tensor',
   latestDegree: 'M.S. Computer Science, NC State · 2025',
   profilePhoto: '/assets/Akash_Kore_Profile.png',
-  summary: `AI Software Engineer with 3+ years of experience building production AI systems: MCP servers, multi-agent agentic workflows (LangChain, LangGraph), RAG pipelines, and LLM fine-tuning (LoRA/QLoRA). Shipped systems delivering 90% reduction in ML review time, 35% inference cost savings, and 99.9% uptime across Ready Tensor, Siemens, and JAEA.`,
+  summary: `AI/ML Engineer with 4+ years across ML, backend, and cloud engineering, now building production Generative AI and LLM systems in Python: RAG pipelines, Agentic AI (LangChain, LangGraph, MCP), multi-agent orchestration, LLM evaluation, and fine-tuning (LoRA/QLoRA). Shipped an open-source LLM evaluation framework and a multi-LLM routing layer that cut inference cost 35% and manual review time 90% at 99.9% uptime. M.S. Computer Science, NC State (USA); 3 years prior engineering experience at Siemens Digital, Principal Global Services, and TATA Research, Pune, India.`,
   heroMetrics: [
     {
       value: '90%',
@@ -54,7 +54,7 @@ export const personal = {
     { icon: 'brain', text: 'MCP servers, LangGraph multi-agent systems, RAG pipelines' },
     { icon: 'cloud', text: 'Production MLOps — AWS, Docker, GitHub Actions CI/CD' },
     { icon: 'code', text: 'Python, FastAPI, PyTorch, vLLM, LoRA/QLoRA fine-tuning' },
-    { icon: 'chart', text: '3+ years · Ready Tensor, Siemens, JAEA' },
+    { icon: 'chart', text: '4+ years · Ready Tensor, Siemens, JAEA' },
   ],
   heroSkills: [
     'Python', 'PyTorch', 'MCP', 'LangGraph', 'LangChain',
@@ -85,12 +85,12 @@ export const experience: Experience[] = [
     role: 'AI Software Engineer',
     type: 'full-time',
     period: 'Aug. 2025 – Present',
-    location: 'San Diego, CA (Remote)',
+    location: 'San Diego, CA, USA',
     highlights: [
-      'Built and shipped readytensor (PyPI): an LLM evaluation and observability framework scoring AI/ML repos across 85 criteria via GPT-4o with structured outputs (Instructor) and seeded, deterministic inference — cutting ML review time by 90%.',
-      'Engineered a multi-LLM routing layer (OpenAI, Gemini, Groq, Anthropic, OpenRouter) with function calling, tool use, and LangChain orchestration; reduced inference costs by 35% across a 10-person team.',
-      'Built production MLOps pipelines (Docker, AWS Lambda, GitHub Actions CI/CD) achieving 99.9% uptime; executed zero-downtime migrations and established IaC standards adopted team-wide.',
-      'Developed and shipped a full authentication system (OAuth 2.0, email verification, RBAC, localization) supporting a platform-wide migration for 50,000+ users.',
+      'Developed readytensor, an open-source PyPI package for LLM evaluation and observability scoring AI/ML repositories on 85 criteria via GPT-4o with structured outputs (Instructor) and prompt engineering, cutting manual review time by 90%.',
+      'Architected a multi-LLM routing layer spanning OpenAI, Gemini, Groq, Anthropic, and OpenRouter with function calling, tool use, and LangChain orchestration, reducing inference cost by 35% for a 10-person team.',
+      'Automated production MLOps pipelines (Docker, AWS Lambda, GitHub Actions CI/CD) at 99.9% uptime; ran zero-downtime PostgreSQL migrations and set IaC standards adopted team-wide.',
+      'Delivered REST APIs and a full authentication system (OAuth, RBAC, email verification) with PII handling and access governance for a platform migration serving 50,000+ users.',
     ],
     tags: ['Python', 'LangChain', 'LangGraph', 'MCP', 'GPT-4o', 'Instructor', 'vLLM', 'Docker', 'AWS Lambda', 'GitHub Actions', 'FastAPI'],
   },
@@ -100,10 +100,10 @@ export const experience: Experience[] = [
     role: 'Machine Learning Intern',
     type: 'intern',
     period: 'May 2024 – Aug. 2024',
-    location: 'Remote',
+    location: 'Raleigh, NC, USA (Remote)',
     highlights: [
-      'Designed a computer vision pipeline for nuclear reactor bubble detection; selected Pix2Pix GAN (PyTorch) for sim-to-real domain adaptation under limited labeled-data constraints — 90% detection accuracy, 30% improved generalization.',
-      'Curated a 50k-image labeled dataset; applied transfer learning fine-tuning; containerized the real-time inference pipeline (Docker, AWS Lambda) achieving 15 FPS and 95% overhead reduction.',
+      'Independently designed a computer vision pipeline for nuclear-reactor bubble detection, selecting Pix2Pix GAN (PyTorch) for sim-to-real domain adaptation under limited labeled data; reached 90% detection accuracy and 30% better generalization.',
+      'Curated a 50k-image labeled dataset and applied transfer-learning fine-tuning; containerized the real-time inference pipeline (Docker, AWS Lambda) at 15 FPS with 95% lower overhead.',
     ],
     tags: ['PyTorch', 'Pix2Pix GAN', 'Computer Vision', 'Transfer Learning', 'Docker', 'AWS Lambda', 'Domain Adaptation'],
   },
@@ -115,10 +115,34 @@ export const experience: Experience[] = [
     period: 'Sep. 2021 – Jun. 2023',
     location: 'Pune, India',
     highlights: [
-      'Engineered Teamcenter on Cloud (TcX) on AWS (EC2, S3, RDS, Lambda) for 500+ global enterprise customers; automated CI/CD via CloudFormation, cutting deployment setup time by 30%.',
-      'Resolved 40+ critical production incidents across Python, C++, and Bash; refactored C++ server-side components — reducing bug resolution time by 25%.',
+      'Engineered Teamcenter on Cloud (TcX) on AWS (EC2, S3, RDS, Lambda) for 500+ global enterprise customers; automated CI/CD with CloudFormation, cutting deployment setup time by 30%.',
+      'Resolved 40+ critical production incidents in Python, C++, and Bash across Agile sprints; refactored C++ server-side microservices, cutting bug-resolution time by 25%.',
     ],
     tags: ['C++', 'Python', 'Bash', 'AWS', 'CloudFormation', 'CI/CD', 'Distributed Systems', 'Agile'],
+  },
+  {
+    id: 'principal',
+    company: 'Principal Global Services',
+    role: 'Software Engineer Intern',
+    type: 'intern',
+    period: 'Jan. 2021 – Sep. 2021',
+    location: 'Pune, India',
+    highlights: [
+      'Built Retirement Income Forecaster (Django REST + React) at sub-200ms API latency; automated AWS Lambda data pipelines, cutting report time 40%.',
+    ],
+    tags: ['Python', 'Django REST', 'React', 'AWS Lambda', 'Data Pipelines'],
+  },
+  {
+    id: 'trddc',
+    company: 'Tata Research Development and Design Centre (TRDDC)',
+    role: 'Research Intern',
+    type: 'research',
+    period: 'May 2020 – Jul. 2020',
+    location: 'Pune, India',
+    highlights: [
+      'Built a graph-based anomaly detection library (OddBall, Scikit-learn) improving accuracy 15%; shipped as a PyPI package used by 5+ hospital partners at 98% reliability.',
+    ],
+    tags: ['Python', 'Scikit-Learn', 'Anomaly Detection', 'Graph Algorithms', 'PyPI'],
   },
 ];
 
@@ -187,17 +211,17 @@ export const skillGroups: SkillGroup[] = [
   {
     category: 'Agentic & Tooling',
     icon: '🤖',
-    skills: ['MCP (Model Context Protocol)', 'LangChain', 'LangGraph', 'Claude Code', 'Function Calling', 'Tool Use', 'Agentic Workflows', 'Multi-Agent Systems'],
+    skills: ['MCP (Model Context Protocol)', 'LangChain', 'LangGraph', 'Claude Code', 'Function Calling', 'Tool Use', 'Agentic Workflows', 'Multi-Agent Systems', 'CrewAI', 'AutoGen'],
   },
   {
     category: 'LLMs & GenAI',
     icon: '🧠',
-    skills: ['GPT-4o', 'LLaMA-3', 'Claude (Anthropic)', 'Gemini', 'OpenAI API', 'LLM Fine-Tuning (LoRA/QLoRA)', 'PEFT', 'Retrieval-Augmented Generation (RAG)', 'LLM Observability', 'vLLM', 'Inference Optimization'],
+    skills: ['GPT-4o', 'LLaMA-3', 'Claude (Anthropic)', 'Gemini', 'OpenAI API', 'LLM Fine-Tuning (LoRA/QLoRA)', 'PEFT', 'Retrieval-Augmented Generation (RAG)', 'Prompt Engineering', 'LLM Evaluation', 'LangSmith', 'LLM Observability', 'Human-in-the-Loop', 'vLLM', 'Inference Optimization'],
   },
   {
     category: 'AI / ML',
     icon: '📊',
-    skills: ['PyTorch', 'TensorFlow', 'Hugging Face Transformers', 'Scikit-Learn', 'Deep Learning', 'NLP', 'Computer Vision', 'Distributed Training', 'ONNX', 'TensorRT', 'Ray'],
+    skills: ['PyTorch', 'TensorFlow', 'Hugging Face Transformers', 'Scikit-Learn', 'Deep Learning', 'NLP', 'Computer Vision', 'Distributed Training', 'Model Deployment', 'ONNX', 'TensorRT', 'Ray'],
   },
   {
     category: 'Languages',
@@ -207,17 +231,17 @@ export const skillGroups: SkillGroup[] = [
   {
     category: 'MLOps & Cloud',
     icon: '☁️',
-    skills: ['AWS (EC2, S3, RDS, Lambda, SageMaker)', 'Docker', 'Kubernetes', 'Terraform', 'GitHub Actions CI/CD', 'MLflow', 'Weights & Biases', 'IaC'],
+    skills: ['AWS (EC2, S3, RDS, Lambda, SageMaker, Bedrock)', 'Azure', 'Azure OpenAI', 'GCP', 'Docker', 'Kubernetes', 'Terraform', 'GitHub Actions CI/CD', 'MLflow', 'Weights & Biases', 'IaC'],
   },
   {
     category: 'Data & Vectors',
     icon: '🗄️',
-    skills: ['pgvector', 'Pinecone', 'ChromaDB', 'FAISS', 'PostgreSQL', 'MongoDB', 'Redis', 'Kafka', 'Apache Spark'],
+    skills: ['pgvector', 'Pinecone', 'ChromaDB', 'FAISS', 'PostgreSQL', 'MongoDB', 'Redis', 'Kafka', 'Apache Spark', 'Airflow', 'ETL Pipelines', 'Embeddings'],
   },
   {
     category: 'Backend & APIs',
     icon: '⚙️',
-    skills: ['FastAPI', 'Django', 'REST APIs', 'GraphQL', 'Pydantic', 'Microservices'],
+    skills: ['FastAPI', 'Django', 'REST APIs', 'GraphQL', 'Pydantic', 'Microservices', 'Git'],
   },
   {
     category: 'Frontend',
@@ -230,7 +254,7 @@ export const education = [
   {
     degree: 'Master of Science in Computer Science',
     school: 'North Carolina State University',
-    location: 'Raleigh, NC',
+    location: 'Raleigh, NC, USA',
     period: 'Aug. 2023 – May 2025',
   },
   {
@@ -242,7 +266,7 @@ export const education = [
 ];
 
 export const stats = [
-  { value: '3+', label: 'Years Experience' },
+  { value: '4+', label: 'Years Experience' },
   { value: '90%', label: 'ML Review Time Cut' },
   { value: '35%', label: 'Inference Cost Saved' },
   { value: '50,000+', label: 'Users Migrated' },

@@ -10,7 +10,7 @@ const educationDetails = [
   {
     degree: 'Master of Science, Computer Science',
     school: 'North Carolina State University',
-    location: 'Raleigh, NC',
+    location: 'Raleigh, NC, USA',
     period: 'Aug. 2023 – May 2025',
     type: 'Graduate',
     focus: 'AI / Machine Learning',

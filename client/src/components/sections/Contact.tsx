@@ -56,7 +56,7 @@ export default function Contact() {
           >
             <p className="text-lg text-muted-foreground leading-relaxed">
               I'm currently open to{' '}
-              <span className="text-foreground font-medium">full-time ML Engineer and Software Engineer roles</span>.
+              <span className="text-foreground font-medium">full-time AI/ML Engineer roles in Pune or remote</span>. I can join immediately.
               If you have an opportunity that aligns with my background, I'd love to hear from you.
             </p>
             <p className="text-base text-muted-foreground leading-relaxed">
@@ -66,7 +66,7 @@ export default function Contact() {
             {/* Location */}
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <MapPin size={14} className="text-accent-brand accent-transition" />
-              <span>{personal.location} · Open to remote and relocation</span>
+              <span>{personal.location} · Open to on-site in Pune or remote roles</span>
             </div>
 
             {/* Primary CTA */}

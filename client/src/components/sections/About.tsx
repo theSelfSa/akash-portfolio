@@ -70,7 +70,7 @@ export default function About() {
               className="flex items-center gap-2 text-sm text-muted-foreground"
             >
               <MapPin size={13} className="text-accent-brand accent-transition flex-shrink-0" />
-              <span>{personal.location} · Open to remote and relocation</span>
+              <span>{personal.location} · Open to on-site in Pune or remote roles</span>
             </motion.div>
 
             {/* Quick Skill Chips */}
